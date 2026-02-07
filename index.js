@@ -15,25 +15,18 @@ function noteCreation() {
 
     addNoteButton.addEventListener('click', () => {
 
-        // inputItem.style.display = 'flex';
         inputItem.classList.remove("activeShowDown");
         doneNoteButton.classList.remove("activeHide");
         inputItem.classList.add("activeShowUp");
         doneNoteButton.classList.add("activeShow");
 
-        // doneNoteButton.style.display = 'block';
-
     });
 
     doneNoteButton.addEventListener('click', () => {
-        // inputItem.classList.replace("activeShowUp" , "activeShowDown");
-        // doneNoteButton.classList.replace("activeShow" ,"activeHide");
         inputItem.classList.remove("activeShowUp");
         doneNoteButton.classList.remove("activeShow");
         inputItem.classList.add("activeShowDown");
         doneNoteButton.classList.add("activeHide");
-        // inputItem.style.display = 'none';
-        // doneNoteButton.style.display = 'none';
     });
 
     addButton.addEventListener("click", (e) => {
