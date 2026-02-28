@@ -15,11 +15,13 @@ function noteCreation() {
     addNoteButton.addEventListener('click', () => {
 
         if (inputItem.classList.contains("activeShowUp")) {
+            addNoteButton.classList.remove("activeButtonRotate");
             inputItem.classList.remove("activeShowUp");
             inputItem.classList.add("activeShowDown");
-
+            
         } else {
             inputItem.classList.remove("activeShowDown");
+            addNoteButton.classList.add("activeButtonRotate");
             inputItem.classList.add("activeShowUp");
         }
 

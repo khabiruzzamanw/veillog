@@ -406,6 +406,10 @@ main {
   border-left: 0.25rem solid green;
 }
 
+.activeButtonRotate {
+  transform: rotate(45deg);
+}
+
 @keyframes toastAnimation {
   0% {
     transform: translateX(1rem);
