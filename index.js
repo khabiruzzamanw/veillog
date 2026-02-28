@@ -5,7 +5,6 @@ themeChanger();
 noteCreation();
 getData(localDataArray);
 
-
 function noteCreation() {
 
     const addButton = document.querySelector("#addButton");
@@ -15,18 +14,15 @@ function noteCreation() {
 
     addNoteButton.addEventListener('click', () => {
 
-        inputItem.classList.remove("activeShowDown");
-        doneNoteButton.classList.remove("activeHide");
-        inputItem.classList.add("activeShowUp");
-        doneNoteButton.classList.add("activeShow");
+        if (inputItem.classList.contains("activeShowUp")) {
+            inputItem.classList.remove("activeShowUp");
+            inputItem.classList.add("activeShowDown");
 
-    });
+        } else {
+            inputItem.classList.remove("activeShowDown");
+            inputItem.classList.add("activeShowUp");
+        }
 
-    doneNoteButton.addEventListener('click', () => {
-        inputItem.classList.remove("activeShowUp");
-        doneNoteButton.classList.remove("activeShow");
-        inputItem.classList.add("activeShowDown");
-        doneNoteButton.classList.add("activeHide");
     });
 
     addButton.addEventListener("click", (e) => {
@@ -56,7 +52,8 @@ function noteCreation() {
 
             setData(localDataArray);
 
-            showJournal(obj.text, obj.heading, obj.id, obj.date, obj.time)
+            showJournal(obj.text, obj.heading, obj.id, obj.date, obj.time);
+            addNoteToast();
 
             textInput.value = "";
             headingInput.value = "";
@@ -84,10 +81,18 @@ function getData(localDataArray) {
 };
 
 
+function addNoteToast() {
+    const addToast = document.createElement("div");
+    addToast.innerHTML = `<p>Your note is added</p>`;
+    addToast.setAttribute("class", "addToast");
+    document.body.append(addToast);
+}
 
 
 function showJournal(text, headingText, id, date, time) {
     const savedDiary = document.querySelector("#savedDiary");
+    const warning = document.querySelector("#warning");
+    if (warning) { warning.style.display = "none"; }
     const diaryContainer = document.createElement("div");
     diaryContainer.setAttribute("class", "noteContainer");
     diaryContainer.classList.add("activeShowUp");
@@ -108,7 +113,6 @@ function showJournal(text, headingText, id, date, time) {
 
                                 `
     savedDiary.appendChild(diaryContainer);
-
     const diary = diaryContainer.querySelector(".note");
     const correction = diaryContainer.querySelector(".correction");
     const journalHeading = diaryContainer.querySelector(".noteHeading");
@@ -121,14 +125,18 @@ function showJournal(text, headingText, id, date, time) {
 
 
     noteDelete.addEventListener("click", () => {
-
         localDataArray = localDataArray.filter((journal) => {
-
             return journal.id !== id;
         });
 
         setData(localDataArray);
         diaryContainer.remove();
+        deletedNoteToast();
+
+        if (localDataArray.length === 0) {
+            const warning = document.querySelector("#warning");
+            if (warning) warning.style.display = "block";
+        }
     });
 
 
@@ -186,6 +194,12 @@ function showJournal(text, headingText, id, date, time) {
 
 
 
+function deletedNoteToast() {
+    const deleteToast = document.createElement("div");
+    deleteToast.innerHTML = `<p>Your note is deleted</p>`;
+    deleteToast.setAttribute("class", "deleteToast");
+    document.body.append(deleteToast);
+}
 
 
 
@@ -199,7 +213,6 @@ function themeChanger() {
     theme.addEventListener("click", () => {
         const themeData = document.body.classList;
         const addNoteButton = document.querySelector("#addNoteButton");
-        const doneNoteButton = document.querySelector("#doneNoteButton");
         const searchbutton = document.querySelector("#searchbutton");
         const noteEditImg = document.querySelectorAll(".noteEditImg");
         const noteDeleteImg = document.querySelectorAll(".noteDeleteImg");
@@ -208,7 +221,6 @@ function themeChanger() {
         if (themeData.contains('dark')) {
             themeData.replace('dark', 'light');
             addNoteButton.src = "images/addNoteDark.svg";
-            doneNoteButton.src = "images/doneDark.svg";
             searchbutton.src = "images/searchDark.svg";
             theme.src = "images/lightMode.svg";
 
@@ -235,7 +247,6 @@ function themeChanger() {
         } else {
             themeData.replace('light', 'dark');
             addNoteButton.src = "images/addNoteLight.svg";
-            doneNoteButton.src = "images/doneLight.svg";
             searchbutton.src = "images/searchLight.svg";
             theme.src = "images/darkMode.svg";
             if (noteEditImg) {

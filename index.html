@@ -6,7 +6,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100..800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="images/journixfavicon.png">
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon_32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="images/favicon_64.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon_180.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <title>Journix</title>
@@ -34,24 +37,22 @@
     <section class="mainPage" id="mainPage">
       <section id="noteCreation" class="noteCreation">
 
-        <div id="addNote" class="addNote">
-          <img src="images/addNoteLight.svg" id="addNoteButton" class="addNoteButton" alt="">
-          <img src="images/doneLight.svg" id="doneNoteButton" class="doneNoteButton" alt="">
-        </div>
-
-        <div class="inputItem" id="inputItem">
+        <div class="inputItem " id="inputItem">
           <input type="text" id="headingInput" class="headingInput" placeholder="Write your Note heading" />
-          <textarea name="" id="textInput" class="textInput" placeholder="Your Journal context">
-        </textarea>
+          <textarea name="" id="textInput" class="textInput" placeholder="Your Journal context"></textarea>
           <button id="addButton" class="addButton">Add</button>
         </div>
 
+        <div id="addNote" class="addNote">
+          <img src="images/addNoteLight.svg" id="addNoteButton" class="addNoteButton" alt="">
+        </div>
 
       </section>
 
       <section id="savedDiarySection" class="savedDiarySection">
 
         <div id="savedDiary" class="savedDiary">
+          <p class="warning" id="warning">You have zero note!!!</p>
 
         </div>
 
