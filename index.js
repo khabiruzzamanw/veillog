@@ -1,6 +1,10 @@
 
 let localDataArray = JSON.parse(localStorage.getItem("key")) || [];
 
+if (localDataArray.length > 0) {
+    const warning = document.querySelector("#warning");
+    if (warning) warning.style.display = "none";
+}
 themeChanger();
 noteCreation();
 getData(localDataArray);
@@ -10,22 +14,24 @@ function noteCreation() {
     const addButton = document.querySelector("#addButton");
     const inputItem = document.querySelector("#inputItem");
     const addNoteButton = document.querySelector("#addNoteButton");
-    const doneNoteButton = document.querySelector("#doneNoteButton");
+    const emptyNoteAdd = document.querySelector("#emptyNoteAdd");
 
-    addNoteButton.addEventListener('click', () => {
+    emptyNoteAdd.addEventListener("click", noteFormShow);
 
+    addNoteButton.addEventListener('click', noteFormShow);
+
+    function noteFormShow() {
         if (inputItem.classList.contains("activeShowUp")) {
             addNoteButton.classList.remove("activeButtonRotate");
             inputItem.classList.remove("activeShowUp");
             inputItem.classList.add("activeShowDown");
-            
+
         } else {
             inputItem.classList.remove("activeShowDown");
             addNoteButton.classList.add("activeButtonRotate");
             inputItem.classList.add("activeShowUp");
         }
-
-    });
+    }
 
     addButton.addEventListener("click", (e) => {
         e.preventDefault();
@@ -88,6 +94,8 @@ function addNoteToast() {
     addToast.innerHTML = `<p>Your note is added</p>`;
     addToast.setAttribute("class", "addToast");
     document.body.append(addToast);
+
+    setTimeout(() => addToast.remove(), 5000);
 }
 
 
@@ -98,32 +106,70 @@ function showJournal(text, headingText, id, date, time) {
     const diaryContainer = document.createElement("div");
     diaryContainer.setAttribute("class", "noteContainer");
     diaryContainer.classList.add("activeShowUp");
+    let noteEditImgSrc;
+    let noteDeleteImgSrc;
+    let noteSaveImgSrc;
+
+    if (document.body.classList.contains("dark")) {
+
+        noteEditImgSrc = "images/editNoteLight.svg";
+        noteDeleteImgSrc = "images/deleteLight.svg";
+        noteSaveImgSrc = "images/saveLight.svg";
+    } else {
+        noteEditImgSrc = "images/editNoteDark.svg";
+        noteDeleteImgSrc = "images/deleteDark.svg";
+        noteSaveImgSrc = "images/saveDark.svg";
+    }
+
+    const diary = document.createElement("div");
+    const correction = document.createElement("div");
+    const journalHeading = document.createElement("h3");
+    const journalPara = document.createElement("p");
+    const noteEdit = document.createElement("button");
+    const noteDelete = document.createElement("button");
+    const noteSave = document.createElement("button");
+    const noteEditImg = document.createElement("img");
+    const noteDeleteImg = document.createElement("img");
+    const noteSaveImg = document.createElement("img");
+    const createdDateTime = document.createElement("span");
+
+    diary.setAttribute("class", "note");
+    correction.setAttribute("class", "correction");
+    journalHeading.setAttribute("class", "noteHeading");
+    journalPara.setAttribute("class", "notePara");
+    noteEdit.setAttribute("class", "noteEdit");
+    noteDelete.setAttribute("class", "noteDelete");
+    noteSave.setAttribute("class", "noteSave");
+    noteEditImg.setAttribute("class", "noteEditImg");
+    noteDeleteImg.setAttribute("class", "noteDeleteImg");
+    noteSaveImg.setAttribute("class", "noteSaveImg");
+    createdDateTime.setAttribute("class", "createdDateTime");
+
+    createdDateTime.textContent = `${date} | ${time}`;
+    journalHeading.textContent = headingText;
+    journalPara.textContent = text;
 
 
-    diaryContainer.innerHTML = `
-                                    <div class="correction">
-                                    <button class="noteEdit"> <img src="images/editNoteLight.svg" class="noteEditImg"></button>
-                                    <button class="noteDelete"> <img src="images/deleteLight.svg" class="noteDeleteImg"></button>
-                                    <button class="noteSave"> <img src="images/saveLight.svg" class="noteSaveImg"></button>
-                                    </div>
-                                    <div class="note">
-                                    <span class="createdDate">${date}</span>
-                                    <h3 class="noteHeading">${headingText}</h3>
-                                    <p class="notePara">${text}</p>
-                                    <span class="createdTime">${time}</span>
-                                    </div>
+    noteEditImg.src = noteEditImgSrc;
+    noteDeleteImg.src = noteDeleteImgSrc;
+    noteSaveImg.src = noteSaveImgSrc;
 
-                                `
-    savedDiary.appendChild(diaryContainer);
-    const diary = diaryContainer.querySelector(".note");
-    const correction = diaryContainer.querySelector(".correction");
-    const journalHeading = diaryContainer.querySelector(".noteHeading");
-    const journalPara = diaryContainer.querySelector(".notePara");
-    const noteEdit = diaryContainer.querySelector(".noteEdit");
-    const noteDelete = diaryContainer.querySelector(".noteDelete");
-    const noteSave = diaryContainer.querySelector(".noteSave");
+    noteEdit.appendChild(noteEditImg);
+    noteDelete.appendChild(noteDeleteImg);
+    noteSave.appendChild(noteSaveImg);
 
+    correction.appendChild(noteEdit);
+    correction.appendChild(noteDelete);
+    correction.appendChild(noteSave);
+    diary.appendChild(createdDateTime);
+    diary.appendChild(journalHeading);
+    diary.appendChild(journalPara);
 
+    diaryContainer.appendChild(correction);
+    diaryContainer.appendChild(diary);
+    const fragment = document.createDocumentFragment();
+    fragment.append(diaryContainer);
+    savedDiary.appendChild(fragment);
 
 
     noteDelete.addEventListener("click", () => {
@@ -137,7 +183,7 @@ function showJournal(text, headingText, id, date, time) {
 
         if (localDataArray.length === 0) {
             const warning = document.querySelector("#warning");
-            if (warning) warning.style.display = "block";
+            if (warning) warning.style.display = "flex";
         }
     });
 
@@ -145,13 +191,13 @@ function showJournal(text, headingText, id, date, time) {
     noteEdit.addEventListener("click", () => {
         const headingEditInput = document.createElement("input");
         headingEditInput.setAttribute("class", "headingEdittng");
-        headingEditInput.value = journalHeading.innerText;
+        headingEditInput.value = journalHeading.textContent;
 
         diary.replaceChild(headingEditInput, journalHeading);
 
         const paraEditInput = document.createElement("textarea");
         paraEditInput.setAttribute("class", "paraEdittng");
-        paraEditInput.value = journalPara.innerText;
+        paraEditInput.value = journalPara.textContent;
 
         diary.replaceChild(paraEditInput, journalPara);
 
@@ -168,13 +214,13 @@ function showJournal(text, headingText, id, date, time) {
             })
             if (editableObject) {
 
-                if (editableObject.heading !== headingEditInput.value || editableObject.innerText !== paraEditInput.value) {
+                if (editableObject.heading !== headingEditInput.value || editableObject.text !== paraEditInput.value) {
 
                     editableObject.heading = headingEditInput.value;
                     editableObject.text = paraEditInput.value;
 
-                    journalHeading.innerText = headingEditInput.value;
-                    journalPara.innerText = paraEditInput.value;
+                    journalHeading.textContent = headingEditInput.value;
+                    journalPara.textContent = paraEditInput.value;
                 }
 
                 setData(localDataArray);
@@ -201,60 +247,80 @@ function deletedNoteToast() {
     deleteToast.innerHTML = `<p>Your note is deleted</p>`;
     deleteToast.setAttribute("class", "deleteToast");
     document.body.append(deleteToast);
+
+    setTimeout(() => deleteToast.remove(), 5000);
 }
 
 
 
 function themeChanger() {
     const theme = document.querySelector("#theme");
+    const addNoteButton = document.querySelector("#addNoteButton");
+    const searchbutton = document.querySelector("#searchbutton");
+    const emptyNoteAdd = document.querySelector("#emptyNoteAdd");
 
-    theme.addEventListener("mouseover", () => {
-        theme.style.cursor = "pointer";
-    });
+    document.body.classList.remove("dark", "light");
+    document.body.classList.add(localStorage.getItem("userTheme") || "dark");
+    addNoteButton.src = localStorage.getItem("addNoteButton") || "images/addNoteLight.svg";
+    searchbutton.src = localStorage.getItem("searchbutton") || "images/searchLight.svg";
+    emptyNoteAdd.src = localStorage.getItem("emptyNoteAdd") || "images/emptyNoteLight.svg";
+    theme.src = localStorage.getItem("theme") || "images/darkMode.svg";
+
 
     theme.addEventListener("click", () => {
-        const themeData = document.body.classList;
-        const addNoteButton = document.querySelector("#addNoteButton");
-        const searchbutton = document.querySelector("#searchbutton");
+
         const noteEditImg = document.querySelectorAll(".noteEditImg");
         const noteDeleteImg = document.querySelectorAll(".noteDeleteImg");
         const noteSaveImg = document.querySelectorAll(".noteSaveImg");
 
-        if (themeData.contains('dark')) {
-            themeData.replace('dark', 'light');
+        if (document.body.classList.contains('dark')) {
+            document.body.classList.replace('dark', 'light');
+            localStorage.setItem("userTheme", "light");
             addNoteButton.src = "images/addNoteDark.svg";
+            localStorage.setItem("addNoteButton", "images/addNoteDark.svg");
             searchbutton.src = "images/searchDark.svg";
+            localStorage.setItem("searchbutton", "images/searchDark.svg");
             theme.src = "images/lightMode.svg";
+            localStorage.setItem("theme", "images/lightMode.svg");
 
             if (noteEditImg) {
                 noteEditImg.forEach((button) => {
                     button.src = "images/editNoteDark.svg";
-                })
+                    localStorage.setItem("noteEditImg", "images/editNoteDark.svg");
+                });
             }
             if (noteDeleteImg) {
-
                 noteDeleteImg.forEach((button) => {
                     button.src = "images/deleteDark.svg";
-                })
-
+                    localStorage.setItem("noteDeleteImg", "images/deleteDark.svg");
+                });
             }
             if (noteSaveImg) {
-
                 noteSaveImg.forEach((button) => {
                     button.src = "images/saveDark.svg";
-                })
+                    localStorage.setItem("noteSaveImg", "images/saveDark.svg");
+                });
+            }
 
+            if (emptyNoteAdd) {
+                emptyNoteAdd.src = "images/emptyNoteDark.svg";
+                localStorage.setItem("emptyNoteAdd", "images/emptyNoteDark.svg");
             }
 
         } else {
-            themeData.replace('light', 'dark');
+            document.body.classList.replace('light', 'dark');
             addNoteButton.src = "images/addNoteLight.svg";
             searchbutton.src = "images/searchLight.svg";
             theme.src = "images/darkMode.svg";
+            localStorage.setItem("userTheme", "dark");
+            localStorage.setItem("addNoteButton", "images/addNoteLight.svg");
+            localStorage.setItem("searchbutton", "images/searchLight.svg");
+            localStorage.setItem("theme", "images/darkMode.svg");
             if (noteEditImg) {
 
                 noteEditImg.forEach((button) => {
                     button.src = "images/editNoteLight.svg";
+                    localStorage.setItem("noteEditImg", "images/editNoteLight.svg");
                 })
 
             }
@@ -262,6 +328,7 @@ function themeChanger() {
 
                 noteDeleteImg.forEach((button) => {
                     button.src = "images/deleteLight.svg";
+                    localStorage.setItem("noteDeleteImg", "images/deleteLight.svg");
                 })
 
             }
@@ -269,8 +336,13 @@ function themeChanger() {
 
                 noteSaveImg.forEach((button) => {
                     button.src = "images/saveLight.svg";
+                    localStorage.setItem("noteSaveImg", "images/saveLight.svg");
                 })
 
+            }
+            if (emptyNoteAdd) {
+                emptyNoteAdd.src = "images/emptyNoteLight.svg";
+                localStorage.setItem("emptyNoteAdd", "images/emptyNoteLight.svg");
             }
 
         };
