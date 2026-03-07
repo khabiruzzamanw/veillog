@@ -605,3 +605,40 @@ main {
 
   }
 }
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navBtn {
+  background-color: transparent;
+  color: var(--font-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease-in, transform 0.2s ease-in;
+}
+
+.navBtn:hover {
+  border-color: var(--accent-color);
+  transform: translateY(-0.1rem);
+}
+
+.exportToast {
+  position: fixed;
+  top: 8rem;
+  right: 1rem;
+  z-index: 300;
+  animation: toastAnimation 5s ease-in-out both;
+  background-color: var(--glass-color);
+  backdrop-filter: blur(4px);
+}
+
+.exportToast p {
+  padding: 0.25rem 0.5rem;
+  border-left: 0.25rem solid var(--accent-color);
+}

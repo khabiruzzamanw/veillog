@@ -1,4 +1,3 @@
-
 let localDataArray = JSON.parse(localStorage.getItem("key")) || [];
 
 if (localDataArray.length > 0) {
@@ -8,6 +7,7 @@ if (localDataArray.length > 0) {
 themeChanger();
 noteCreation();
 getData(localDataArray);
+exportImport();
 
 function noteCreation() {
 
@@ -350,3 +350,96 @@ function themeChanger() {
     });
 
 };
+
+function exportImport() {
+    const exportBtn = document.querySelector("#exportBtn");
+    const importBtn = document.querySelector("#importBtn");
+    const importFile = document.querySelector("#importFile");
+
+    // EXPORT — convert notes array to JSON and trigger download
+    exportBtn.addEventListener("click", () => {
+        if (localDataArray.length === 0) {
+            exportToast("No notes to export");
+            return;
+        }
+
+        const json = JSON.stringify(localDataArray, null, 2); // pretty print JSON
+        const blob = new Blob([json], { type: "application/json" }); // create file blob
+        const url = URL.createObjectURL(blob); // create temporary download URL
+
+        const a = document.createElement("a"); // create invisible link
+        a.href = url;
+        a.download = `journix-notes-${new Date().toLocaleDateString('en-GB').replace(/\//g, "-")}.json`; // filename with date
+        a.click(); // trigger download
+        URL.revokeObjectURL(url); // clean up memory
+
+        exportToast("Notes exported successfully");
+    });
+
+    // IMPORT — open file picker when button clicked
+    importBtn.addEventListener("click", () => {
+        importFile.click(); // trigger hidden file input
+    });
+
+    // FILE READER — runs when user selects a .json file
+    importFile.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!file.name.endsWith(".json")) {
+            exportToast("Please select a .json file");
+            importFile.value = ""; // reset file input
+            return;
+        }
+
+        const reader = new FileReader(); // FileReader reads file contents
+        reader.readAsText(file); // read file as plain text
+
+        reader.onload = (event) => {
+            try {
+                const importedData = JSON.parse(event.target.result); // parse JSON text back to array
+
+                if (!Array.isArray(importedData)) {
+                    exportToast("Invalid file format");
+                    return;
+                }
+
+                // MERGE — only add notes that don't already exist (check by id)
+                const existingIds = new Set(localDataArray.map(n => n.id));
+                const newNotes = importedData.filter(note => !existingIds.has(note.id));
+
+                if (newNotes.length === 0) {
+                    exportToast("No new notes found in file");
+                    importFile.value = "";
+                    return;
+                }
+
+                // add new notes to array, save, and render them
+                localDataArray.push(...newNotes);
+                setData(localDataArray);
+
+                newNotes.forEach(note => {
+                    showJournal(note.text, note.heading, note.id, note.date, note.time);
+                });
+
+                const warning = document.querySelector("#warning");
+                if (warning) warning.style.display = "none";
+
+                exportToast(`${newNotes.length} note${newNotes.length > 1 ? "s" : ""} imported`);
+
+            } catch (err) {
+                exportToast("Failed to read file");
+            }
+
+            importFile.value = ""; // reset so same file can be imported again if needed
+        };
+    });
+}
+
+function exportToast(message) {
+    const toast = document.createElement("div");
+    toast.innerHTML = `<p>${message}</p>`;
+    toast.setAttribute("class", "exportToast");
+    document.body.append(toast);
+    setTimeout(() => toast.remove(), 5000);
+}

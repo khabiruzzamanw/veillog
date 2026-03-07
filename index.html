@@ -28,7 +28,12 @@
             <img src="images/searchLight.svg" id="searchbutton" class="searchbutton" alt="">
           </span>
         </li>
-        <li><img src="images/darkMode.svg" class="theme" id="theme" alt=""></li>
+        <li class="navActions">
+          <button id="exportBtn" class="navBtn" title="Export notes">Export</button>
+          <button id="importBtn" class="navBtn" title="Import notes">Import</button>
+          <input type="file" id="importFile" accept=".json" style="display:none;">
+          <img src="images/darkMode.svg" class="theme" id="theme" alt="">
+        </li>
       </ul>
     </nav>
   </header>
