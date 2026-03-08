@@ -16,50 +16,95 @@
 </head>
 
 <body id="home" class="dark">
+
   <header>
     <nav>
       <ul>
-        <li class=""><a href="#home" class="">Home</a></li>
-        <li class="searchBar">
-          <span>
-            <input type="search" name="" id="search" class="search" placeholder="Search" />
-          </span>
-          <span>
-            <img src="images/searchLight.svg" id="searchbutton" class="searchbutton" alt="">
-          </span>
+        <li class="">
+          <a href="#home" class="home">Home</a>
         </li>
-        <li><img src="images/darkMode.svg" class="theme" id="theme" alt=""></li>
+        <li>
+          <img src="images/darkMode.svg" class="theme" id="theme" alt="">
+        </li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <section class="mainPage" id="mainPage">
-      <section id="noteCreation" class="noteCreation">
 
-        <div class="inputItem " id="inputItem">
-          <input type="text" id="headingInput" class="headingInput" placeholder="Write your Note heading" />
-          <textarea name="" id="textInput" class="textInput" placeholder="Your Journal context"></textarea>
-          <button id="addButton" class="addButton">Add</button>
+    <aside class="sideBar" id="sideBar">
+      <div class="sideBarButton" id="sideBarButton">
+        <img src="images/openMenuLight.svg" class="menu" id="menu" alt="">
+      </div>
+      <div class="addEntry" id="addEntry">
+        <img src="images/addNoteLight.svg" alt="">
+        <p>Do a entry</p>
+      </div>
+      <div class="searchBar">
+        <img src="images/searchLight.svg" id="searchbutton" class="searchbutton" alt="">
+        <input type="search" name="" id="search" class="search" placeholder="Search" />
+      </div>
+      <div class="daySelect">
+        <div class="dropDownToggler">
+          <img src="images/daySelectionLight.svg" alt="" class="">
+          <p>Timeline</p>
+          <img src="images/dropDownLight.svg" alt="" class="dropDownIcon">
         </div>
 
-        <div id="addNote" class="addNote">
-          <img src="images/addNoteLight.svg" id="addNoteButton" class="addNoteButton" alt="">
+        <div class="daySelectGrid  dropDown">
+          <ul>
+            <li class="">Today</li>
+            <li class="">Yesterday</li>
+            <li class="">Last Week</li>
+            <li class="">Last month</li>
+          </ul>
+
+        </div>
+      </div>
+      <div class="catagorySelect">
+        <div class="dropDownToggler">
+          <img src="images/daySelectionLight.svg" alt="" class="">
+          <p>Catagory</p>
+          <img src="images/dropDownLight.svg" alt="" class="dropDownIcon">
         </div>
 
-      </section>
+        <div class="catagorySelectGrid dropDown">
+          <ul>
+            <li class="">Note</li>
+            <li class="">Todo</li>
+            <li class="">Journal</li>
+          </ul>
 
-      <section id="savedDiarySection" class="savedDiarySection">
- <div id="savedDiary" class="savedDiary"></div>
-        <div class="warning" id="warning">
-          <img src="images/emptyNoteLight.svg" alt="" class="emptyNoteAdd" id="emptyNoteAdd">
-          <p>No notes yet</p>
-          <p>Start capturing your thoughts.</p>
         </div>
-       
+      </div>
+    </aside>
 
-      </section>
+
+    <section class="contentPage" id="contentPage">
+      <!-- <div class="noteContainer">
+        <div class="note">
+          <h3 class="noteHead">Head</h3>
+          <span class="dividerLine"></span>
+          <p class="notePara">This is the text in the note paragragh .</p>
+        </div>
+        <div class="noteLastSection">
+          <div class="createdData">
+            <p>11.11 | 01.01.2026</p>
+          </div>
+          <div class="correction">
+            <img src="images/deleteLight.svg" alt="" class="deleteNote">
+            <img src="images/editNoteLight.svg" alt="" class="editNote">
+          </div>
+        </div>
+      </div> -->
+
+      <div class="warning" id="warning">
+        <img src="images/emptyNoteLight.svg" alt="" class="emptyNoteAdd" id="emptyNoteAdd">
+        <p>No notes yet</p>
+        <p>Start capturing your thoughts.</p>
+      </div>
     </section>
+
   </main>
 
   <script src="index.js"></script>
