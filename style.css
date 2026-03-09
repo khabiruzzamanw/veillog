@@ -2,21 +2,42 @@
   --header-height: 80px;
 
   --bg: #080808;
-    --border-color: rgba(255, 255, 255, 0.08);
-    --surface: #111111;
-    --surface-muted: #101010;
-    --hovered-surface: #191919;
-    --text-muted: rgba(155, 155, 155, 0.75);
-    --text: #f5f5f5;
-    --button: black;
+  --blured: rgba(0, 0, 0, 0.65);
+  --accent: #a93226;
+  --surface: #111111;
+  --surface-muted: #0d0d0d;
+  --text: #f0f0f0;
+  --text-muted: #555555;
+  --border: rgba(255, 255, 255, 0.07);
+  --button: #080808;
+  --closeButton: #a93226;
+  --saveButton: #1a1a1a;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --deleteToast: #a93226;
+  --addToast: #555555;
+
 }
 
 
 
+
 .light {
-  --bg: white;
-  --font-color: black;
-  --border-color: rgba(125, 125, 125, 0.5);
+  --header-height: 80px;
+
+  --bg: #f7f7f5;
+  --blured: rgba(0, 0, 0, 0.45);
+  --accent: #2563eb;
+  --surface: #ffffff;
+  --surface-muted: #f0f0ee;
+  --text: #111111;
+  --text-muted: #aaaaaa;
+  --border: rgba(0, 0, 0, 0.08);
+  --button: #f7f7f5;
+  --closeButton: #1a56db;
+  --saveButton: #f0f0ee;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  --deleteToast: #1a56db;
+  --addToast: #aaaaaa;
 }
 
 
@@ -34,10 +55,11 @@ body {
 }
 
 body {
+  width: 100%;
   background: var(--bg);
   color: var(--text);
-  width: 100%;
   font-family: sans-serif;
+  transition: all 0.2s ease-in;
 }
 
 header {
@@ -46,7 +68,7 @@ header {
   top: 0;
   position: -webkit-sticky;
   z-index: 200;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border);
   height: var(--header-height);
 }
 
@@ -76,7 +98,7 @@ nav ul li a {
 .home {
   font-size: 1.5rem;
   font-family: sans-serif;
-  color: var(--text);
+  color: var(--accent);
 }
 
 .theme {
@@ -102,7 +124,7 @@ aside {
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
-  border-right: 1px solid var(--border-color);
+  border-right: 1px solid var(--border);
   padding: 0 1rem 2rem 1rem;
   overflow: hidden;
   transition: all 0.25s ease-in-out;
@@ -118,7 +140,7 @@ aside img {
 }
 
 aside img:hover {
-  background: var(--bg);
+  background: var(--button);
 }
 
 .mutedText {
@@ -143,8 +165,8 @@ aside img:hover {
 }
 
 aside>div {
-  border-bottom: 1px solid var(--border-color);
-  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
 }
 
 .searchBar {
@@ -168,6 +190,7 @@ aside>div {
 
 .search::placeholder {
   font-size: var(--font);
+  color: var(--text-muted);
 }
 
 .dropDownToggler {
@@ -202,7 +225,7 @@ aside>div {
 }
 
 .dropDown ul li:hover {
-  background: var(--bg);
+  background: var(--button);
 }
 
 .dropDown>* {
@@ -230,8 +253,7 @@ aside>div {
 
 .contentPage {
   width: 100%;
-  padding: 2rem;
-  /* min-height: 100vh; */
+  padding: 2.5rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
@@ -243,16 +265,6 @@ aside>div {
   cursor: pointer;
 }
 
-/* .warning {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  padding-top: 8rem;
-} */
-
 .warning {
   width: 100%;
   height: calc(100vh - var(--header-height));
@@ -262,7 +274,6 @@ aside>div {
   align-items: center;
   gap: 0.5rem;
   grid-column: 1 / -1;
-  /* span all grid columns so it's not squished into one cell */
 }
 
 .warning p {
@@ -274,8 +285,7 @@ aside>div {
   position: fixed;
   inset: 0;
   backdrop-filter: blur(4px);
-  background: rgba(0, 0, 0, 0.6);
-  /* opacity: 0.25; */
+  background: var(--blured);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -299,6 +309,7 @@ aside>div {
   border-radius: 1rem;
   padding: 1rem;
   overflow: hidden;
+  box-shadow: var(--shadow);
   animation: modalShow 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -308,7 +319,8 @@ aside>div {
   padding: 0.5rem;
   color: var(--text);
   border-radius: 1rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border);
+  transition: all 0.25s ease-in;
 }
 
 .textInput {
@@ -316,23 +328,32 @@ aside>div {
   background: transparent;
   color: var(--text);
   box-sizing: border-box;
-  border: 0.1rem solid var(--border-color);
+  border: 0.1rem solid var(--border);
   min-height: 10rem;
   padding: 0.5rem;
   resize: vertical;
   border-radius: 1rem;
+  transition: all 0.25s ease-in;
+}
+
+.headInput::placeholder,
+.textInput::placeholder {
+  color: var(--text-muted);
+}
+
+.headInput:focus,
+.textInput:focus {
+  border-color: var(--accent);
 }
 
 .noteButtons {
   width: 100%;
   display: flex;
   justify-content: space-evenly;
-
 }
 
 .closeButton {
-  /* width: 25%; */
-  background: crimson;
+  background: var(--closeButton);
   padding: 0.5rem 1rem;
   color: var(--text);
   border-radius: 1rem;
@@ -340,8 +361,7 @@ aside>div {
 }
 
 .saveButton {
-  /* width: 25%; */
-  background: forestgreen;
+  background: var(--saveButton);
   padding: 0.5rem 1rem;
   color: var(--text);
   border-radius: 1rem;
@@ -355,8 +375,13 @@ aside>div {
   border-radius: 1rem;
   display: grid;
   grid-template-rows: 1fr auto;
-  overflow: hidden;
+  overflow: clip;
+  transition: all 0.25s ease-in-out;
+}
 
+.noteContainer:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-4px);
 }
 
 .note {
@@ -369,7 +394,7 @@ aside>div {
 .dividerLine {
   width: 100%;
   height: 2px;
-  background: var(--border-color);
+  background: var(--border);
   opacity: 0.6;
 }
 
@@ -389,12 +414,12 @@ aside>div {
 
 .noteLastSection {
   width: 100%;
+  background: var(--surface-muted);
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border);
   padding: 0.5rem 1rem;
-  background: var(--surface-muted);
 
 }
 
@@ -405,7 +430,11 @@ aside>div {
   padding: 0.25rem 0;
 }
 
-.correction {}
+.correction {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
 
 .correction img {
   padding: 0.25rem 0.5rem;
@@ -415,7 +444,7 @@ aside>div {
 }
 
 .correction img:hover {
-  background: var(--bg);
+  background: var(--button);
 }
 
 
@@ -425,14 +454,14 @@ aside>div {
   right: 1rem;
   z-index: 300;
   animation: toastAnimation 5s ease-in-out both;
-  background-color: var(--glass-color);
+  background: var(--blured);
   backdrop-filter: blur(4px);
 
 }
 
 .deleteToast p {
   padding: 0.25rem 0.5rem;
-  border-left: 0.25rem solid red;
+  border-left: 0.25rem solid var(--deleteToast);
 }
 
 .addToast {
@@ -441,14 +470,18 @@ aside>div {
   right: 1rem;
   z-index: 300;
   animation: toastAnimation 5s ease-in-out both;
-  background-color: var(--glass-color);
+  background: var(--blured);
   backdrop-filter: blur(4px);
 }
 
 
 .addToast p {
   padding: 0.25rem 0.5rem;
-  border-left: 0.25rem solid green;
+  border-left: 0.25rem solid var(--addToast);
+}
+
+.activeShowUp {
+  animation: showUp 0.3s ease-in;
 }
 
 @keyframes modalShow {

@@ -20,10 +20,6 @@ function noteCreation() {
     addEntry.addEventListener('click', noteFormShow);
     emptyNoteAdd.addEventListener("click", noteFormShow);
 
-    const inputItem = document.querySelector("#inputItem");
-
-
-
     function noteFormShow() {
 
         if (document.querySelector(".noteInputContainer")) {
@@ -392,7 +388,7 @@ function themeChanger() {
             localStorage.setItem("menu", "images/menuDark.svg");
             daySelectImage.src = "images/daySelectionDark.svg";
             localStorage.setItem("daySelectImage", "images/daySelectionDark.svg");
-            catagorySelectImage.src = "images/catagoryIconDark.svg.svg";
+            catagorySelectImage.src = "images/catagoryIconDark.svg";
             localStorage.setItem("catagorySelectImage", "images/catagoryIconDark.svg");
             dropDownIcon.forEach((icon) => {
                 icon.src = "images/dropDownDark.svg";
