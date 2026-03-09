@@ -88,8 +88,10 @@ function noteCreation() {
 
         const headInput = document.createElement("input");
         headInput.setAttribute("class", "headInput");
+        headInput.placeholder = 'Write your Note heading';
         const textInput = document.createElement("textarea");
         textInput.setAttribute("class", "textInput");
+        textInput.placeholder = 'Your Journal context';
         const saveButton = document.createElement("button");
         saveButton.textContent = 'Save entry';
         saveButton.setAttribute("class", "saveButton");
