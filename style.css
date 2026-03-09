@@ -1,12 +1,14 @@
 :root {
-  --bg: #0a0a0a;
-  --border-color: #2a2a2a;
   --header-height: 80px;
-  --surface: #141414;
-  --surface-muted: #101010;
-  --hovered-surface: #1f1f1f;
-  --text-muted: #666666;
-  --font-color: #f0f0f0;
+
+  --bg: #080808;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --surface: #111111;
+    --surface-muted: #101010;
+    --hovered-surface: #191919;
+    --text-muted: rgba(155, 155, 155, 0.75);
+    --text: #f5f5f5;
+    --button: black;
 }
 
 
@@ -16,6 +18,7 @@
   --font-color: black;
   --border-color: rgba(125, 125, 125, 0.5);
 }
+
 
 * {
   padding: 0px;
@@ -32,7 +35,7 @@ body {
 
 body {
   background: var(--bg);
-  color: var(--font-color);
+  color: var(--text);
   width: 100%;
   font-family: sans-serif;
 }
@@ -66,14 +69,14 @@ nav ul {
 nav ul li {}
 
 nav ul li a {
-  color: var(--font-color);
+  color: var(--text);
   text-decoration: none;
 }
 
 .home {
   font-size: 1.5rem;
   font-family: sans-serif;
-  color: var(--font-color);
+  color: var(--text);
 }
 
 .theme {
@@ -98,13 +101,13 @@ aside {
   z-index: 200;
   display: flex;
   flex-direction: column;
-  row-gap: 2rem;
+  row-gap: 1rem;
   border-right: 1px solid var(--border-color);
   padding: 0 1rem 2rem 1rem;
   overflow: hidden;
   transition: all 0.25s ease-in-out;
   text-wrap: nowrap;
-
+  --font: 0.85rem;
 }
 
 aside img {
@@ -118,57 +121,53 @@ aside img:hover {
   background: var(--bg);
 }
 
+.mutedText {
+  color: var(--text-muted);
+  font-size: var(--font);
+}
+
 .sideBarButton {
   width: 100%;
   display: flex;
   justify-content: flex-end;
   padding-left: 2rem;
+  border: none;
 }
-
-/* .menu {
-  padding: 0.25rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.25s ease-in-out;
-}
-
-.menu:hover {
-  background: var(--bg);
-} */
 
 .addEntry {
   width: 100%;
   display: flex;
   align-items: center;
   column-gap: 1rem;
+
 }
 
-.addEntry p {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.25s ease-in-out;
+aside>div {
+  border-bottom: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
 }
-
-.addEntry p:hover {
-  background: var(--bg);
-}
-
-/* .addEntry img {
-  padding: 0.25rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.25s ease-in-out;
-}
-
-.addEntry img:hover {
-  background: var(--bg);
-} */
 
 .searchBar {
   width: 100%;
   display: flex;
+  align-items: center;
   column-gap: 1rem;
+  transition: background 0.25s ease-in-out;
+}
+
+.searchBar:focus-within {
+  background: var(--surface-muted);
+}
+
+.search {
+  background: transparent;
+  color: var(--text);
+  border: none;
+  outline: none;
+}
+
+.search::placeholder {
+  font-size: var(--font);
 }
 
 .dropDownToggler {
@@ -186,16 +185,6 @@ aside img:hover {
 
 }
 
-/* .dropDownIcon {
-  padding: 0.25rem;
-  border-radius: 0.5rem;
-  transition: all 0.25s ease-in-out;
-}
-
-.dropDownIcon:hover {
-  background: var(--bg);
-} */
-
 .dropDown ul {
   display: flex;
   flex-direction: column;
@@ -208,6 +197,7 @@ aside img:hover {
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
   cursor: pointer;
+  opacity: 0.75;
   transition: all 0.25s ease-in-out;
 }
 
@@ -233,7 +223,7 @@ aside img:hover {
 }
 
 .hide {
-  width: 3vw;
+  width: 3.5vw;
   overflow: hidden;
   text-wrap: nowrap;
 }
@@ -243,7 +233,7 @@ aside img:hover {
   padding: 2rem;
   /* min-height: 100vh; */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
 }
 
@@ -277,7 +267,7 @@ aside img:hover {
 
 .warning p {
   font-size: 2rem;
-  opacity: 0.6;
+  color: var(--text-muted);
 }
 
 .noteInputContainer {
@@ -290,7 +280,7 @@ aside img:hover {
   justify-content: center;
   align-items: center;
   z-index: 500;
-
+  animation: show 0.25s ease-in both;
 }
 
 .noteInputContainer>* {
@@ -301,20 +291,22 @@ aside img:hover {
 
 
 .noteInputWrapper {
-  width: 50%;
+  width: 25%;
   display: flex;
   background: var(--surface-muted);
   flex-direction: column;
   row-gap: 2rem;
   border-radius: 1rem;
+  padding: 1rem;
   overflow: hidden;
+  animation: modalShow 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .headInput {
   width: 100%;
   background: transparent;
   padding: 0.5rem;
-  color: var(--font-color);
+  color: var(--text);
   border-radius: 1rem;
   border: 1px solid var(--border-color);
 }
@@ -322,7 +314,7 @@ aside img:hover {
 .textInput {
   width: 100%;
   background: transparent;
-  color: var(--font-color);
+  color: var(--text);
   box-sizing: border-box;
   border: 0.1rem solid var(--border-color);
   min-height: 10rem;
@@ -331,11 +323,29 @@ aside img:hover {
   border-radius: 1rem;
 }
 
-.saveButton {
+.noteButtons {
   width: 100%;
-  padding: 0.5rem;
-  color: var(--font-color);
+  display: flex;
+  justify-content: space-evenly;
+
+}
+
+.closeButton {
+  /* width: 25%; */
+  background: crimson;
+  padding: 0.5rem 1rem;
+  color: var(--text);
   border-radius: 1rem;
+  cursor: pointer;
+}
+
+.saveButton {
+  /* width: 25%; */
+  background: forestgreen;
+  padding: 0.5rem 1rem;
+  color: var(--text);
+  border-radius: 1rem;
+  cursor: pointer;
 }
 
 .noteContainer {
@@ -381,6 +391,7 @@ aside img:hover {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   border-top: 1px solid var(--border-color);
   padding: 0.5rem 1rem;
   background: var(--surface-muted);
@@ -389,8 +400,9 @@ aside img:hover {
 
 .createdData {
   font-family: sans-serif;
-  font-size: 0.85rem;
-  opacity: 0.85;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0.25rem 0;
 }
 
 .correction {}
@@ -409,7 +421,7 @@ aside img:hover {
 
 .deleteToast {
   position: fixed;
-  top: 5rem;
+  bottom: 5rem;
   right: 1rem;
   z-index: 300;
   animation: toastAnimation 5s ease-in-out both;
@@ -425,7 +437,7 @@ aside img:hover {
 
 .addToast {
   position: fixed;
-  top: 2rem;
+  bottom: 2rem;
   right: 1rem;
   z-index: 300;
   animation: toastAnimation 5s ease-in-out both;
@@ -437,6 +449,18 @@ aside img:hover {
 .addToast p {
   padding: 0.25rem 0.5rem;
   border-left: 0.25rem solid green;
+}
+
+@keyframes modalShow {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(48px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @keyframes toastAnimation {
@@ -508,3 +532,73 @@ aside img:hover {
 
   }
 }
+
+@media (max-width : 1400px) {
+  aside {
+    width: 20vw;
+  }
+
+  .hide {
+    width: 5vw;
+  }
+}
+
+@media (max-width : 1020px) {
+  aside {
+    width: 25vw;
+  }
+
+  .hide {
+    width: 6vw;
+  }
+
+  .noteInputWrapper {
+    width: 35%;
+  }
+}
+
+@media (max-width : 850px) {
+  aside {
+    width: 30vw;
+  }
+
+  .hide {
+    width: 7vw;
+  }
+}
+
+@media (max-width : 700px) {
+  aside {
+    width: 35vw;
+  }
+
+  .hide {
+    width: 8vw;
+  }
+
+  .noteInputWrapper {
+    width: 50%;
+  }
+}
+
+@media (max-width : 600px) {
+  aside {
+    width: 40vw;
+  }
+
+  .hide {
+    width: 10vw;
+  }
+
+  .noteInputWrapper {
+    width: 60%;
+  }
+}
+
+@media (max-width : 500px) {
+  .hide {
+    width: 12vw;
+  }
+}
+
+@media (max-width : 400px) {}
