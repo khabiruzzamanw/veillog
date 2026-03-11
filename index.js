@@ -1,6 +1,12 @@
+/* ─── Journix — index.js ─────────────────────────────────────── */
 
+// SVG icon strings (inline — no image files needed)
+const SVG = {
+  edit: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+  delete: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`,
+};
 
-
+/* ─── State ──────────────────────────────────────────────────── */
 let localDataArray = JSON.parse(localStorage.getItem("key")) || [];
 
 if (localDataArray.length > 0) {
@@ -8,981 +14,561 @@ if (localDataArray.length > 0) {
   if (warning) warning.style.display = "none";
 }
 
+/* ─── Init ───────────────────────────────────────────────────── */
 themeChanger();
 toggles();
 noteCreation();
 getData(localDataArray);
-exportImport();
+searchInit();
 
+/* ─── Note Creation ─────────────────────────────────────────── */
 function noteCreation() {
   const addEntry = document.querySelector("#addEntry");
-  const emptyNoteAdd = document.querySelector("#emptyNoteAdd");
+  const emptyNote = document.querySelector("#emptyNoteAdd");
 
-  addEntry.addEventListener('click', typeSelection);
-  emptyNoteAdd.addEventListener("click", typeSelection);
+  addEntry.addEventListener("click", typeSelection);
+  emptyNote.addEventListener("click", typeSelection);
 
   function typeSelection() {
     const bluredBg = document.createElement("div");
     bluredBg.setAttribute("class", "bluredBg");
-    const typeSelectionContainer = document.createElement("div");
-    typeSelectionContainer.setAttribute("class", "typeSelectionContainer");
-    const typeSelectionHead = document.createElement("p");
-    typeSelectionHead.setAttribute("class", "typeSelectionHead");
-    typeSelectionHead.textContent = "Select what you wanna do";
-    const typeSelectionWrapper = document.createElement("div");
-    typeSelectionWrapper.setAttribute("class", "typeSelectionWrapper");
-    const noteType = document.createElement("div");
-    noteType.setAttribute("class", "noteType  typeChoice");
-    noteType.textContent = "Note";
-    const journalType = document.createElement("div");
-    journalType.setAttribute("class", "journalType  typeChoice");
-    journalType.textContent = "Journal";
-    const todoType = document.createElement("div");
-    todoType.setAttribute("class", "todoType  typeChoice");
-    todoType.textContent = "Todo";
 
-    typeSelectionWrapper.append(noteType);
-    typeSelectionWrapper.append(journalType);
-    typeSelectionWrapper.append(todoType);
-    typeSelectionContainer.append(typeSelectionHead);
-    typeSelectionContainer.append(typeSelectionWrapper);
-    bluredBg.append(typeSelectionContainer);
+    const container = document.createElement("div");
+    container.setAttribute("class", "typeSelectionContainer");
+
+    const head = document.createElement("p");
+    head.setAttribute("class", "typeSelectionHead");
+    head.textContent = "What would you like to create?";
+
+    const wrapper = document.createElement("div");
+    wrapper.setAttribute("class", "typeSelectionWrapper");
+
+    ["Note", "Journal", "Todo"].forEach((label) => {
+      const btn = document.createElement("div");
+      btn.setAttribute("class", `${label.toLowerCase()}Type typeChoice`);
+      btn.textContent = label;
+      wrapper.append(btn);
+    });
+
+    container.append(head, wrapper);
+    bluredBg.append(container);
     document.body.append(bluredBg);
 
-    document.querySelectorAll(".typeChoice").forEach((button) => {
+    // Close on backdrop click
+    bluredBg.addEventListener("click", (e) => {
+      if (e.target === bluredBg) bluredBg.remove();
+    });
 
-      button.addEventListener("click", () => {
-
-        switch (button.textContent.trim().toLowerCase()) {
-          case "note":
-            formShow("noteInputContainer", "noteInputWrapper", true, "noteTextInput", "note");
-
-            break;
-          case "journal":
-            formShow("journalInputContainer", "journalInputWrapper", true, "journalTextInput", "journal");
-
-            break;
-          case "todo":
-            formShow("todoInputContainer", "todoInputWrapper", false, "todoTextInput", "todo");
-            break;
-
-          default:
-            formShow("noteInputContainer", "noteInputWrapper", true, "noteTextInput", "note");
-            break;
-        }
+    wrapper.querySelectorAll(".typeChoice").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const t = btn.textContent.trim().toLowerCase();
         bluredBg.remove();
+        switch (t) {
+          case "note": formShow("noteInputContainer", "noteInputWrapper", true, "noteTextInput", "note"); break;
+          case "journal": formShow("journalInputContainer", "journalInputWrapper", true, "journalTextInput", "journal"); break;
+          case "todo": formShow("todoInputContainer", "todoInputWrapper", false, "todoTextInput", "todo"); break;
+        }
       });
     });
   }
 
-  function formShow(containerName, wrapperName, value, textName, type) {
+  function formShow(containerClass, wrapperClass, hasHeading, textClass, type) {
+    if (document.querySelector(`.${containerClass}`)) return;
 
-    if (document.querySelector(`.${containerName}`)) {
-      return;
-    }
-
-    const container = document.createElement("div");
-    container.setAttribute("class", `${containerName}`);
+    const overlay = document.createElement("div");
+    overlay.setAttribute("class", containerClass);
 
     const wrapper = document.createElement("div");
-    wrapper.setAttribute("class", `${wrapperName}`);
-
-    const textInput = document.createElement("textarea");
-    textInput.setAttribute("class", `${textName}`);
-    textInput.placeholder = `Your ${type} context`;
-
-    const noteButtons = document.createElement("div");
-    noteButtons.setAttribute("class", "noteButtons");
-
-    const saveButton = document.createElement("button");
-    saveButton.textContent = 'Save entry';
-    saveButton.setAttribute("class", "saveButton");
-
-    const closeButton = document.createElement("button");
-    closeButton.textContent = 'Close entry';
-    closeButton.setAttribute("class", "closeButton");
+    wrapper.setAttribute("class", wrapperClass);
 
     const headInput = document.createElement("input");
     headInput.setAttribute("class", "headInput");
-    headInput.placeholder = `Write your ${type} heading`;
-    if (value === false) {
-      headInput.style.display = "none";
-    }
+    headInput.placeholder = `Entry title…`;
+    if (!hasHeading) headInput.style.display = "none";
 
-    wrapper.append(headInput);
-    wrapper.append(textInput);
-    noteButtons.append(closeButton);
-    noteButtons.append(saveButton);
-    wrapper.append(noteButtons);
+    const textInput = document.createElement("textarea");
+    textInput.setAttribute("class", textClass);
+    textInput.placeholder = type === "todo"
+      ? "Describe your task…"
+      : `Write your ${type}…`;
 
-    container.append(wrapper);
-    document.body.append(container);
+    const btnRow = document.createElement("div");
+    btnRow.setAttribute("class", "noteButtons");
 
-    closeButton.addEventListener("click", () => {
-      container.remove();
-    });
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "Discard";
+    closeBtn.setAttribute("class", "closeButton");
 
-    saveButton.addEventListener("click", (e) => {
+    const saveBtn = document.createElement("button");
+    saveBtn.textContent = "Save entry";
+    saveBtn.setAttribute("class", "saveButton");
+
+    btnRow.append(closeBtn, saveBtn);
+    wrapper.append(headInput, textInput, btnRow);
+    overlay.append(wrapper);
+    document.body.append(overlay);
+
+    // Focus first visible input
+    setTimeout(() => (hasHeading ? headInput : textInput).focus(), 50);
+
+    // Close on backdrop
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
+    closeBtn.addEventListener("click", () => overlay.remove());
+
+    saveBtn.addEventListener("click", (e) => {
       e.preventDefault();
 
       const text = textInput.value.trim();
-      let headingText;
-      if (value === true) {
-        headingText = headInput.value.trim();
-      } else {
-        headingText = type;
+      const headingText = hasHeading ? headInput.value.trim() : type;
+
+      if (text === "" || (hasHeading && headingText === "")) {
+        toastFunction("Please fill in all fields", "deleteToast");
+        return;
       }
 
-      const timeDateDigit = new Date();
-      const timeDigit = timeDateDigit.toLocaleTimeString();
-      const dateDigit = timeDateDigit.toLocaleDateString('en-GB').replace(/\//g, ".");
-      const numberedDate = timeDateDigit.getDate();
-      const monthText = timeDateDigit.toLocaleDateString('en-GB', { month: 'long' });
-      const dayText = timeDateDigit.toLocaleDateString('en-GB', { weekday: 'long' });
-
-      let todoTime = timeDateDigit.toLocaleTimeString();
-
-      if (text === '' || headingText === '') {
-        toastFunction("You need to fill both 🙂", "deleteToast");
-      } else {
-        const obj = {
-          heading: headingText,
-          text: text,
-          id: Date.now(),
-          date: dateDigit,
-          time: timeDigit,
-          catagory: type,
-          dateNumber: numberedDate,
-          month: monthText,
-          day: dayText,
-          todoDueTime: todoTime
-        };
-
-        localDataArray.push(obj);
-
-        setData(localDataArray);
-
-        switch (obj.catagory) {
-          case "note":
-            noteUI(obj.text, obj.heading, obj.id, obj.date, obj.time, obj.catagory);
-            break;
-          case "journal":
-            journalUI(obj.heading, obj.text, obj.day, obj.month, obj.dateNumber, obj.date, obj.time, obj.id, obj.catagory);
-            break;
-          case "todo":
-            todoUI(obj.text, obj.date, obj.time, obj.todoDueTime, obj.id, obj.catagory);
-            break;
-
-          default:
-            noteUI(obj.text, obj.heading, obj.id, obj.date, obj.time, obj.catagory);
-            break;
-        }
-        toastFunction(`${type} is added`, "addToast");
-
-        textInput.value = "";
-        headInput.value = "";
-      }
-
-      container.remove();
-
-    });
-
-  };
-};
-
-
-function setData(localDataArray) {
-  localStorage.setItem("key", JSON.stringify(localDataArray));
-};
-
-
-function getData(localDataArray) {
-  localDataArray.forEach((element, index) => {
-    switch (element.catagory) {
-
-      case "note":
-        noteUI(element.text, element.heading, element.id, element.date, element.time, element.catagory);
-        break;
-      case "journal":
-        journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.catagory);
-        break;
-      case "todo":
-
-        todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.catagory);
-        break;
-
-      default:
-        noteUI(element.text, element.heading, element.id, element.date, element.time, element.catagory);
-        break;
-
-    }
-  });
-};
-
-
-function journalUI(headingText, text, day, month, dateNumber, date, time, id, type) {
-  const contentPage = document.querySelector("#contentPage");
-  const warning = document.querySelector("#warning");
-  if (warning) { warning.style.display = "none" };
-
-  const journalContainer = document.createElement("div");
-  journalContainer.setAttribute("class", "journalContainer");
-  journalContainer.classList.add("activeShowUp");
-
-  const journalDateWrapper = document.createElement("div");
-  journalDateWrapper.setAttribute("class", "journalDateWrapper");
-  const journalDate = document.createElement("p");
-  journalDate.setAttribute("class", "journalDate");
-
-  const journal = document.createElement("div");
-  journal.setAttribute("class", "journal");
-
-  const journalHead = document.createElement("h3");
-  journalHead.setAttribute("class", "journalHead");
-
-  const journalPara = document.createElement("p");
-  journalPara.setAttribute("class", "journalPara");
-
-  const journalLastSection = document.createElement("div");
-  journalLastSection.setAttribute("class", "journalLastSection");
-
-  const createdData = document.createElement("div");
-  createdData.setAttribute("class", "createdData");
-
-  const correction = document.createElement("div");
-  correction.setAttribute("class", "correction");
-
-  const createdDateTime = document.createElement("p");
-  createdDateTime.setAttribute("class", "createdDateTime");
-
-  const journalEditImage = document.createElement("img");
-  journalEditImage.setAttribute("class", "journalEditImage");
-
-  const journalDeleteImage = document.createElement("img");
-  journalDeleteImage.setAttribute("class", "journalDeleteImage");
-
-  let journalEditImageSrc;
-  let journalDeleteImageSrc;
-
-  if (document.body.classList.contains("dark")) {
-
-    journalEditImageSrc = "images/editNoteLight.svg";
-    journalDeleteImageSrc = "images/deleteLight.svg";
-  } else {
-    journalEditImageSrc = "images/editNoteDark.svg";
-    journalDeleteImageSrc = "images/deleteDark.svg";
-  }
-  journalEditImage.src = journalEditImageSrc;
-  journalDeleteImage.src = journalDeleteImageSrc;
-
-
-  journalHead.textContent = headingText;
-  journalPara.textContent = text;
-  journalDate.textContent = `${day} ,${month} ${dateNumber}`;
-  createdDateTime.textContent = `${date} | ${time}`;
-
-
-
-  journalDateWrapper.append(journalDate);
-  journal.append(journalDateWrapper);
-  journal.append(journalHead);
-  journal.append(journalPara);
-  createdData.append(createdDateTime);
-  correction.append(journalEditImage);
-  correction.append(journalDeleteImage);
-  journalLastSection.append(createdData);
-  journalLastSection.append(correction);
-  journalContainer.append(journal);
-  journalContainer.append(journalLastSection);
-
-
-  const fragment = document.createDocumentFragment();
-  fragment.append(journalContainer);
-  contentPage.appendChild(fragment);
-
-  journalDeleteImage.addEventListener("click", () => {
-    localDataArray = localDataArray.filter((journal) => {
-      return journal.id !== id;
-    });
-
-    setData(localDataArray);
-    journalContainer.remove();
-    toastFunction(`${type} is deleted`, "deleteToast");
-
-    if (localDataArray.length === 0) {
-      const warning = document.querySelector("#warning");
-      if (warning) warning.style.display = "flex";
-    }
-  });
-
-
-  journalEditImage.onclick = noteEditAndSave;
-  function noteEditAndSave() {
-
-    if (document.querySelector(`.${type}InputContainer`)) {
-      return;
-    }
-
-    const container = document.createElement("div");
-    container.setAttribute("class", `${type}InputContainer`);
-
-    const wrapper = document.createElement("div");
-    wrapper.setAttribute("class", `${type}InputWrapper`);
-
-    const headInput = document.createElement("input");
-    headInput.setAttribute("class", "headInput");
-    headInput.value = journalHead.textContent;
-    const textInput = document.createElement("textarea");
-    textInput.setAttribute("class", `${type}TextInput`);
-    textInput.value = journalPara.textContent;
-
-    const noteButtons = document.createElement("div");
-    noteButtons.setAttribute("class", "noteButtons");
-
-    const saveButton = document.createElement("button");
-    saveButton.textContent = 'Save entry';
-    saveButton.setAttribute("class", "saveButton");
-
-    const closeButton = document.createElement("button");
-    closeButton.textContent = 'Close entry';
-    closeButton.setAttribute("class", "closeButton");
-
-
-    wrapper.append(headInput);
-    wrapper.append(textInput);
-    noteButtons.append(closeButton);
-    noteButtons.append(saveButton);
-    wrapper.append(noteButtons);
-
-    container.append(wrapper);
-    document.body.append(container);
-
-    closeButton.addEventListener("click", () => {
-      container.remove();
-    });
-
-    saveButton.addEventListener("click", () => {
-      const editableObject = localDataArray.find((element) => {
-
-        return element.id === id;
-      })
-      if (editableObject) {
-
-        if (editableObject.heading !== headInput.value || editableObject.text !== textInput.value) {
-
-          editableObject.heading = headInput.value;
-          editableObject.text = textInput.value;
-
-          journalHead.textContent = headInput.value;
-          journalPara.textContent = textInput.value;
-        }
-
-        setData(localDataArray);
-
+      const now = new Date();
+      const obj = {
+        heading: headingText,
+        text: text,
+        id: Date.now(),
+        date: now.toLocaleDateString("en-GB").replace(/\//g, "."),
+        time: now.toLocaleTimeString(),
+        catagory: type,
+        dateNumber: now.getDate(),
+        month: now.toLocaleDateString("en-GB", { month: "long" }),
+        day: now.toLocaleDateString("en-GB", { weekday: "long" }),
+        todoDueTime: now.toLocaleTimeString(),
       };
 
-      container.remove();
+      localDataArray.push(obj);
+      setData(localDataArray);
+      renderEntry(obj);
+      toastFunction(`${type} saved`, "addToast");
+      overlay.remove();
     });
-
-  };
-};
-
-
-function todoUI(text, date, time, todoDueTime, id, type) {
-
-  const contentPage = document.querySelector("#contentPage");
-  const warning = document.querySelector("#warning");
-  if (warning) { warning.style.display = "none" };
-
-  const todoContainer = document.createElement("div");
-  todoContainer.setAttribute("class", "todoContainer");
-  todoContainer.classList.add("activeShowUp");
-
-  const todo = document.createElement("div");
-  todo.setAttribute("class", "todo");
-
-  const dueTime = document.createElement("div");
-  dueTime.setAttribute("class", "dueTime");
-
-  const dueTimeText = document.createElement("p");
-  dueTimeText.setAttribute("class", "dueTimeText");
-
-  const todoTime = document.createElement("p");
-  todoTime.setAttribute("class", "todoTime");
-
-  const todoPara = document.createElement("p");
-  todoPara.setAttribute("class", "todoPara");
-
-  const todoCreatedDateTime = document.createElement("p");
-  todoCreatedDateTime.setAttribute("class", "todoCreatedDateTime");
-
-  const todoCorrection = document.createElement("div");
-  todoCorrection.setAttribute("class", "todoCorrection");
-
-  const todoEditImage = document.createElement("img");
-  todoEditImage.setAttribute("class", "todoEditImage");
-
-  const todoDeleteImage = document.createElement("img");
-  todoDeleteImage.setAttribute("class", "todoDeleteImage");
-
-
-  todoPara.textContent = text;
-  todoCreatedDateTime.textContent = `${date} | ${time}`;
-  todoTime.textContent = todoDueTime;
-  dueTimeText.textContent = `Todo is due to`
-
-  let todoEditImageSrc;
-  let todoDeleteImageSrc;
-
-  if (document.body.classList.contains("dark")) {
-
-    todoEditImageSrc = "images/editNoteLight.svg";
-    todoDeleteImageSrc = "images/deleteLight.svg";
-  } else {
-    todoEditImageSrc = "images/editNoteDark.svg";
-    todoDeleteImageSrc = "images/deleteDark.svg";
   }
-  todoEditImage.src = todoEditImageSrc;
-  todoDeleteImage.src = todoDeleteImageSrc;
+}
 
-  todo.append(todoPara);
-  todo.append(todoCreatedDateTime);
-  todoCorrection.append(todoEditImage);
-  todoCorrection.append(todoDeleteImage);
-  dueTime.append(dueTimeText);
-  dueTime.append(todoTime);
-  todoContainer.append(todo);
-  todoContainer.append(dueTime);
-  todoContainer.append(todoCorrection);
-  const fragment = document.createDocumentFragment();
-  fragment.append(todoContainer);
-  contentPage.appendChild(fragment);
+/* ─── Render dispatcher ─────────────────────────────────────── */
+function renderEntry(el) {
+  switch (el.catagory) {
+    case "note": noteUI(el.text, el.heading, el.id, el.date, el.time, el.catagory); break;
+    case "journal": journalUI(el.heading, el.text, el.day, el.month, el.dateNumber, el.date, el.time, el.id, el.catagory); break;
+    case "todo": todoUI(el.text, el.date, el.time, el.todoDueTime, el.id, el.catagory); break;
+    default: noteUI(el.text, el.heading, el.id, el.date, el.time, el.catagory);
+  }
+}
 
+/* ─── Storage ───────────────────────────────────────────────── */
+function setData(arr) { localStorage.setItem("key", JSON.stringify(arr)); }
 
-  todoDeleteImage.addEventListener("click", () => {
-    localDataArray = localDataArray.filter((todo) => {
-      return todo.id !== id;
-    });
+function getData(arr) { arr.forEach(renderEntry); }
 
-    setData(localDataArray);
-    todoContainer.remove();
-    toastFunction(`${type} is deleted`, "deleteToast");
+/* ─── Shared: build action buttons ─────────────────────────── */
+function buildActionBtn(svgStr, extraClass) {
+  const btn = document.createElement("button");
+  btn.setAttribute("class", `iconBtn ${extraClass}`);
+  btn.innerHTML = svgStr;
+  btn.style.cssText = `
+    background: transparent;
+    border: none;
+    padding: 0.375rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.3;
+    transition: opacity 0.2s, background 0.2s;
+    color: var(--text);
+  `;
+  btn.addEventListener("mouseenter", () => { btn.style.opacity = "0.85"; btn.style.background = "var(--surface-hover)"; });
+  btn.addEventListener("mouseleave", () => { btn.style.opacity = "0.3"; btn.style.background = "transparent"; });
+  return btn;
+}
 
-    if (localDataArray.length === 0) {
-      const warning = document.querySelector("#warning");
-      if (warning) warning.style.display = "flex";
-    }
+/* ─── Delete helper ─────────────────────────────────────────── */
+function deleteEntry(id, type, cardEl) {
+  localDataArray = localDataArray.filter((e) => e.id !== id);
+  setData(localDataArray);
+  cardEl.style.transition = "opacity 0.25s, transform 0.25s";
+  cardEl.style.opacity = "0";
+  cardEl.style.transform = "translateY(4px)";
+  setTimeout(() => cardEl.remove(), 250);
+  toastFunction(`${type} deleted`, "deleteToast");
+  if (localDataArray.length === 0) {
+    const w = document.querySelector("#warning");
+    if (w) w.style.display = "flex";
+  }
+}
+
+/* ─── Edit modal helper ─────────────────────────────────────── */
+function openEditModal(type, hasHeading, currentHead, currentText, onSave) {
+  if (document.querySelector(`.${type}InputContainer`)) return;
+
+  const overlay = document.createElement("div");
+  overlay.setAttribute("class", `${type}InputContainer`);
+
+  const wrapper = document.createElement("div");
+  wrapper.setAttribute("class", `${type}InputWrapper`);
+
+  const headInput = document.createElement("input");
+  headInput.setAttribute("class", "headInput");
+  headInput.value = currentHead;
+  if (!hasHeading) headInput.style.display = "none";
+
+  const textInput = document.createElement("textarea");
+  textInput.setAttribute("class", `${type}TextInput`);
+  textInput.value = currentText;
+
+  const btnRow = document.createElement("div");
+  btnRow.setAttribute("class", "noteButtons");
+
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "Discard";
+  closeBtn.setAttribute("class", "closeButton");
+
+  const saveBtn = document.createElement("button");
+  saveBtn.textContent = "Save changes";
+  saveBtn.setAttribute("class", "saveButton");
+
+  btnRow.append(closeBtn, saveBtn);
+  wrapper.append(headInput, textInput, btnRow);
+  overlay.append(wrapper);
+  document.body.append(overlay);
+
+  setTimeout(() => (hasHeading ? headInput : textInput).focus(), 50);
+
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
+  closeBtn.addEventListener("click", () => overlay.remove());
+  saveBtn.addEventListener("click", () => {
+    onSave(headInput.value, textInput.value);
+    overlay.remove();
   });
+}
 
-
-  todoEditImage.onclick = noteEditAndSave;
-  function noteEditAndSave() {
-
-    if (document.querySelector(`.${type}InputContainer`)) {
-      return;
-    }
-
-    const container = document.createElement("div");
-    container.setAttribute("class", `${type}InputContainer`);
-
-    const wrapper = document.createElement("div");
-    wrapper.setAttribute("class", `${type}InputWrapper`);
-
-    const textInput = document.createElement("textarea");
-    textInput.setAttribute("class", `${type}TextInput`);
-    textInput.value = todoPara.textContent;
-
-    const noteButtons = document.createElement("div");
-    noteButtons.setAttribute("class", "noteButtons");
-
-    const saveButton = document.createElement("button");
-    saveButton.textContent = 'Save entry';
-    saveButton.setAttribute("class", "saveButton");
-
-    const closeButton = document.createElement("button");
-    closeButton.textContent = 'Close entry';
-    closeButton.setAttribute("class", "closeButton");
-
-    wrapper.append(textInput);
-    noteButtons.append(closeButton);
-    noteButtons.append(saveButton);
-    wrapper.append(noteButtons);
-
-    container.append(wrapper);
-    document.body.append(container);
-
-    closeButton.addEventListener("click", () => {
-      container.remove();
-    });
-
-    saveButton.addEventListener("click", () => {
-      const editableObject = localDataArray.find((element) => {
-
-        return element.id === id;
-      })
-      if (editableObject) {
-
-        if (editableObject.text !== textInput.value) {
-
-          editableObject.text = textInput.value;
-
-          todoPara.textContent = textInput.value;
-        }
-
-        setData(localDataArray);
-
-      };
-
-      container.remove();
-    });
-
-  };
-};
-
-
+/* ─── Note UI ───────────────────────────────────────────────── */
 function noteUI(text, headingText, id, date, time, type) {
   const contentPage = document.querySelector("#contentPage");
-
-
   const warning = document.querySelector("#warning");
-  if (warning) { warning.style.display = "none" };
+  if (warning) warning.style.display = "none";
 
-  const noteContainer = document.createElement("div");
-  noteContainer.setAttribute("class", "noteContainer");
-  noteContainer.classList.add("activeShowUp");
-
-  let noteEditImageSrc;
-  let noteDeleteImageSrc;
-
-  if (document.body.classList.contains("dark")) {
-
-    noteEditImageSrc = "images/editNoteLight.svg";
-    noteDeleteImageSrc = "images/deleteLight.svg";
-  } else {
-    noteEditImageSrc = "images/editNoteDark.svg";
-    noteDeleteImageSrc = "images/deleteDark.svg";
-  }
+  const card = document.createElement("div");
+  card.setAttribute("class", "noteContainer activeShowUp");
 
   const note = document.createElement("div");
   note.setAttribute("class", "note");
 
   const noteHead = document.createElement("h3");
   noteHead.setAttribute("class", "noteHead");
+  noteHead.textContent = headingText;
+
+  const divider = document.createElement("span");
+  divider.setAttribute("class", "dividerLine");
 
   const notePara = document.createElement("p");
   notePara.setAttribute("class", "notePara");
+  notePara.textContent = text;
 
-  const dividerLine = document.createElement("span");
-  dividerLine.setAttribute("class", "dividerLine");
+  note.append(noteHead, divider, notePara);
 
-  const noteLastSection = document.createElement("div");
-  noteLastSection.setAttribute("class", "noteLastSection");
+  const footer = document.createElement("div");
+  footer.setAttribute("class", "noteLastSection");
 
   const createdData = document.createElement("div");
   createdData.setAttribute("class", "createdData");
+  const dt = document.createElement("p");
+  dt.setAttribute("class", "createdDateTime");
+  dt.textContent = `${date} · ${time}`;
+  createdData.append(dt);
 
   const correction = document.createElement("div");
   correction.setAttribute("class", "correction");
 
-  const createdDateTime = document.createElement("p");
-  createdDateTime.setAttribute("class", "createdDateTime");
+  const editBtn = buildActionBtn(SVG.edit, "noteEditImage");
+  const deleteBtn = buildActionBtn(SVG.delete, "noteDeleteImage");
 
-  const noteEditImage = document.createElement("img");
-  noteEditImage.setAttribute("class", "noteEditImage");
+  correction.append(editBtn, deleteBtn);
+  footer.append(createdData, correction);
+  card.append(note, footer);
+  contentPage.appendChild(card);
 
-  const noteDeleteImage = document.createElement("img");
-  noteDeleteImage.setAttribute("class", "noteDeleteImage");
+  deleteBtn.addEventListener("click", () => deleteEntry(id, type, card));
 
-
-
-  createdDateTime.textContent = `${date} | ${time}`;
-  noteHead.textContent = headingText;
-  notePara.textContent = text;
-
-  noteEditImage.src = noteEditImageSrc;
-  noteDeleteImage.src = noteDeleteImageSrc;
-
-  note.append(noteHead);
-  note.append(dividerLine);
-  note.append(notePara);
-
-  noteLastSection.append(createdData);
-  createdData.append(createdDateTime);
-  noteLastSection.append(correction);
-  correction.append(noteEditImage);
-  correction.append(noteDeleteImage);
-
-  noteContainer.append(note);
-  noteContainer.append(noteLastSection);
-
-  const fragment = document.createDocumentFragment();
-  fragment.append(noteContainer);
-  contentPage.appendChild(fragment);
-
-
-  noteDeleteImage.addEventListener("click", () => {
-    localDataArray = localDataArray.filter((journal) => {
-      return journal.id !== id;
-    });
-
-    setData(localDataArray);
-    noteContainer.remove();
-    toastFunction(`${type} is deleted`, "deleteToast");
-
-    if (localDataArray.length === 0) {
-      const warning = document.querySelector("#warning");
-      if (warning) warning.style.display = "flex";
-    }
-  });
-
-
-  noteEditImage.onclick = noteEditAndSave;
-  function noteEditAndSave() {
-
-    if (document.querySelector(`.${type}InputContainer`)) {
-      return;
-    }
-
-    const container = document.createElement("div");
-    container.setAttribute("class", `${type}InputContainer`);
-
-    const wrapper = document.createElement("div");
-    wrapper.setAttribute("class", `${type}InputWrapper`);
-
-    const headInput = document.createElement("input");
-    headInput.setAttribute("class", "headInput");
-    headInput.value = noteHead.textContent;
-    const textInput = document.createElement("textarea");
-    textInput.setAttribute("class", `${type}TextInput`);
-    textInput.value = notePara.textContent;
-
-    const noteButtons = document.createElement("div");
-    noteButtons.setAttribute("class", "noteButtons");
-
-    const saveButton = document.createElement("button");
-    saveButton.textContent = 'Save entry';
-    saveButton.setAttribute("class", "saveButton");
-
-    const closeButton = document.createElement("button");
-    closeButton.textContent = 'Close entry';
-    closeButton.setAttribute("class", "closeButton");
-
-    wrapper.append(headInput);
-    wrapper.append(textInput);
-    noteButtons.append(closeButton);
-    noteButtons.append(saveButton);
-    wrapper.append(noteButtons);
-
-    container.append(wrapper);
-    document.body.append(container);
-
-    closeButton.addEventListener("click", () => {
-      container.remove();
-    });
-
-    saveButton.addEventListener("click", () => {
-      const editableObject = localDataArray.find((element) => {
-
-        return element.id === id;
-      })
-      if (editableObject) {
-
-        if (editableObject.heading !== headInput.value || editableObject.text !== textInput.value) {
-
-          editableObject.heading = headInput.value;
-          editableObject.text = textInput.value;
-
-          noteHead.textContent = headInput.value;
-          notePara.textContent = textInput.value;
-        }
-
+  editBtn.addEventListener("click", () => {
+    openEditModal(type, true, noteHead.textContent, notePara.textContent, (h, t) => {
+      const obj = localDataArray.find((e) => e.id === id);
+      if (obj) {
+        obj.heading = h; obj.text = t;
+        noteHead.textContent = h;
+        notePara.textContent = t;
         setData(localDataArray);
-
-      };
-
-      container.remove();
+      }
     });
+  });
+}
 
-  };
+/* ─── Journal UI ────────────────────────────────────────────── */
+function journalUI(headingText, text, day, month, dateNumber, date, time, id, type) {
+  const contentPage = document.querySelector("#contentPage");
+  const warning = document.querySelector("#warning");
+  if (warning) warning.style.display = "none";
 
-};
+  const card = document.createElement("div");
+  card.setAttribute("class", "journalContainer activeShowUp");
 
+  const journal = document.createElement("div");
+  journal.setAttribute("class", "journal");
 
+  const dateWrap = document.createElement("div");
+  dateWrap.setAttribute("class", "journalDateWrapper");
+  const journalDate = document.createElement("p");
+  journalDate.setAttribute("class", "journalDate");
+  journalDate.textContent = `${day}, ${month} ${dateNumber}`;
+  dateWrap.append(journalDate);
+
+  const journalHead = document.createElement("h3");
+  journalHead.setAttribute("class", "journalHead");
+  journalHead.textContent = headingText;
+
+  const journalPara = document.createElement("p");
+  journalPara.setAttribute("class", "journalPara");
+  journalPara.textContent = text;
+
+  journal.append(dateWrap, journalHead, journalPara);
+
+  const footer = document.createElement("div");
+  footer.setAttribute("class", "journalLastSection");
+
+  const createdData = document.createElement("div");
+  createdData.setAttribute("class", "createdData");
+  const dt = document.createElement("p");
+  dt.setAttribute("class", "createdDateTime");
+  dt.textContent = `${date} · ${time}`;
+  createdData.append(dt);
+
+  const correction = document.createElement("div");
+  correction.setAttribute("class", "correction");
+
+  const editBtn = buildActionBtn(SVG.edit, "journalEditImage");
+  const deleteBtn = buildActionBtn(SVG.delete, "journalDeleteImage");
+
+  correction.append(editBtn, deleteBtn);
+  footer.append(createdData, correction);
+  card.append(journal, footer);
+  contentPage.appendChild(card);
+
+  deleteBtn.addEventListener("click", () => deleteEntry(id, type, card));
+
+  editBtn.addEventListener("click", () => {
+    openEditModal(type, true, journalHead.textContent, journalPara.textContent, (h, t) => {
+      const obj = localDataArray.find((e) => e.id === id);
+      if (obj) {
+        obj.heading = h; obj.text = t;
+        journalHead.textContent = h;
+        journalPara.textContent = t;
+        setData(localDataArray);
+      }
+    });
+  });
+}
+
+/* ─── Todo UI ───────────────────────────────────────────────── */
+function todoUI(text, date, time, todoDueTime, id, type) {
+  const contentPage = document.querySelector("#contentPage");
+  const warning = document.querySelector("#warning");
+  if (warning) warning.style.display = "none";
+
+  const card = document.createElement("div");
+  card.setAttribute("class", "todoContainer activeShowUp");
+
+  const todo = document.createElement("div");
+  todo.setAttribute("class", "todo");
+
+  const todoPara = document.createElement("p");
+  todoPara.setAttribute("class", "todoPara");
+  todoPara.textContent = text;
+
+  const todoCreatedDT = document.createElement("p");
+  todoCreatedDT.setAttribute("class", "todoCreatedDateTime");
+  todoCreatedDT.textContent = `${date} · ${time}`;
+
+  todo.append(todoPara, todoCreatedDT);
+
+  const dueTime = document.createElement("div");
+  dueTime.setAttribute("class", "dueTime");
+
+  const dueLabel = document.createElement("p");
+  dueLabel.setAttribute("class", "dueTimeText");
+  dueLabel.textContent = "Due";
+
+  const todoTime = document.createElement("p");
+  todoTime.setAttribute("class", "todoTime");
+  todoTime.textContent = todoDueTime;
+
+  dueTime.append(dueLabel, todoTime);
+
+  const correction = document.createElement("div");
+  correction.setAttribute("class", "todoCorrection");
+
+  const editBtn = buildActionBtn(SVG.edit, "todoEditImage");
+  const deleteBtn = buildActionBtn(SVG.delete, "todoDeleteImage");
+
+  correction.append(editBtn, deleteBtn);
+  card.append(todo, dueTime, correction);
+  contentPage.appendChild(card);
+
+  deleteBtn.addEventListener("click", () => deleteEntry(id, type, card));
+
+  editBtn.addEventListener("click", () => {
+    openEditModal(type, false, "", todoPara.textContent, (_, t) => {
+      const obj = localDataArray.find((e) => e.id === id);
+      if (obj) {
+        obj.text = t;
+        todoPara.textContent = t;
+        setData(localDataArray);
+      }
+    });
+  });
+}
+
+/* ─── Toast ─────────────────────────────────────────────────── */
 function toastFunction(message, name) {
   const toast = document.createElement("div");
-  toast.innerHTML = `<p>${message}</p>`;
   toast.setAttribute("class", name);
+  toast.innerHTML = `<p>${message}</p>`;
   document.body.append(toast);
-
   setTimeout(() => toast.remove(), 5000);
 }
 
-
+/* ─── Toggles (sidebar + dropdowns) ────────────────────────── */
 function toggles() {
-  const menu = document.querySelector(".menu");
+  const menu = document.querySelector("#menu");
   const sideBar = document.querySelector(".sideBar");
-  const dropDownToggler = document.querySelectorAll(".dropDownToggler");
+  const togglers = document.querySelectorAll(".dropDownToggler");
 
   menu.addEventListener("click", () => {
-    if (sideBar.classList.contains("hide")) {
+    const isHidden = sideBar.classList.contains("hide");
+    if (isHidden) {
       sideBar.classList.remove("hide");
       menu.classList.remove("dropDownOpen");
     } else {
-      dropDownClose();
+      closeAllDropDowns();
       sideBar.classList.add("hide");
       menu.classList.add("dropDownOpen");
-
     }
-
   });
 
-  dropDownToggler.forEach((toggle) => {
-    toggle.addEventListener("click", () => {
-      const dropDown = toggle.parentElement.querySelector(".dropDown");
-      const dropDownIcon = toggle.parentElement.querySelector(".dropDownIcon");
+  togglers.forEach((tog) => {
+    tog.addEventListener("click", () => {
+      const dd = tog.parentElement.querySelector(".dropDown");
+      const icon = tog.querySelector(".dropDownIcon");
+      const open = dd.classList.contains("toggled");
 
-      if (dropDown.classList.contains("toggled")) {
-        dropDown.classList.remove("toggled");
-        dropDownIcon.classList.remove("dropDownOpen");
-      }
-      else {
+      closeAllDropDowns();
+
+      if (!open) {
         sideBar.classList.remove("hide");
         menu.classList.remove("dropDownOpen");
-        dropDown.classList.add("toggled");
-        dropDownIcon.classList.add("dropDownOpen");
-
+        dd.classList.add("toggled");
+        if (icon) icon.classList.add("dropDownOpen");
       }
-    })
-  })
-
-  function dropDownClose() {
-    dropDownToggler.forEach((toggle) => {
-      const dropDown = toggle.parentElement.querySelector(".dropDown");
-      const dropDownIcon = toggle.parentElement.querySelector(".dropDownIcon");
-      dropDown.classList.remove("toggled");
-      dropDownIcon.classList.remove("dropDownOpen");
     });
-  };
+  });
 
-};
+  function closeAllDropDowns() {
+    togglers.forEach((tog) => {
+      const dd = tog.parentElement.querySelector(".dropDown");
+      const icon = tog.querySelector(".dropDownIcon");
+      if (dd) dd.classList.remove("toggled");
+      if (icon) icon.classList.remove("dropDownOpen");
+    });
+  }
+}
 
-
+/* ─── Theme ─────────────────────────────────────────────────── */
 function themeChanger() {
-  const theme = document.querySelector("#theme");
-  const addEntryImage = document.querySelector(".addEntryImage");
-  const searchbutton = document.querySelector(".searchbutton");
-  const emptyNoteAdd = document.querySelector(".emptyNoteAdd");
-  const menu = document.querySelector(".menu");
-  const daySelectImage = document.querySelector(".daySelectImage");
-  const catagorySelectImage = document.querySelector(".catagorySelectImage");
-  const dropDownIcon = document.querySelectorAll(".dropDownIcon");
+  const themeBtn = document.querySelector("#theme");
 
+  // Moon SVG (for dark mode — click to go light)
+  const moonSVG = `<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>`;
+  // Sun SVG (for light mode — click to go dark)
+  const sunSVG = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
 
+  const savedTheme = localStorage.getItem("userTheme") || "dark";
   document.body.classList.remove("dark", "light");
-  document.body.classList.add(localStorage.getItem("userTheme") || "dark");
-  addEntryImage.src = localStorage.getItem("addEntryImage") || "images/addNoteLight.svg";
-  searchbutton.src = localStorage.getItem("searchbutton") || "images/searchLight.svg";
-  emptyNoteAdd.src = localStorage.getItem("emptyNoteAdd") || "images/emptyNoteLight.svg";
-  menu.src = localStorage.getItem("menu") || "images/menuLight.svg";
-  daySelectImage.src = localStorage.getItem("daySelectImage") || "images/daySelectionLight.svg";
-  catagorySelectImage.src = localStorage.getItem("catagorySelectImage") || "images/catagoryIconLight.svg";
-  theme.src = localStorage.getItem("theme") || "images/darkMode.svg";
-  dropDownIcon.forEach((icon) => {
-    icon.src = localStorage.getItem("dropDownIcon") || "images/dropDownLight.svg";
-  });
+  document.body.classList.add(savedTheme);
+  themeBtn.innerHTML = savedTheme === "dark" ? moonSVG : sunSVG;
 
-
-  theme.addEventListener("click", () => {
-
-    const noteEditImage = document.querySelectorAll(".noteEditImage");
-    const noteDeleteImage = document.querySelectorAll(".noteDeleteImage");
-    const journalEditImage = document.querySelectorAll(".journalEditImage");
-    const journalDeleteImage = document.querySelectorAll(".journalDeleteImage");
-    const todoEditImage = document.querySelectorAll(".todoEditImage");
-    const todoDeleteImage = document.querySelectorAll(".todoDeleteImage");
-
-    if (document.body.classList.contains('dark')) {
-      document.body.classList.replace('dark', 'light');
-      localStorage.setItem("userTheme", "light");
-      addEntryImage.src = "images/addNoteDark.svg";
-      localStorage.setItem("addEntryImage", "images/addNoteDark.svg");
-      searchbutton.src = "images/searchDark.svg";
-      localStorage.setItem("searchbutton", "images/searchDark.svg");
-      theme.src = "images/lightMode.svg";
-      localStorage.setItem("theme", "images/lightMode.svg");
-      menu.src = "images/menuDark.svg";
-      localStorage.setItem("menu", "images/menuDark.svg");
-      daySelectImage.src = "images/daySelectionDark.svg";
-      localStorage.setItem("daySelectImage", "images/daySelectionDark.svg");
-      catagorySelectImage.src = "images/catagoryIconDark.svg";
-      localStorage.setItem("catagorySelectImage", "images/catagoryIconDark.svg");
-      dropDownIcon.forEach((icon) => {
-        icon.src = "images/dropDownDark.svg";
-        localStorage.setItem("dropDownIcon", "images/dropDownDark.svg");
-      });
-
-      if (noteEditImage) {
-        noteEditImage.forEach((button) => {
-          button.src = "images/editNoteDark.svg";
-          localStorage.setItem("noteEditImage", "images/editNoteDark.svg");
-        });
-      }
-      if (noteDeleteImage) {
-        noteDeleteImage.forEach((button) => {
-          button.src = "images/deleteDark.svg";
-          localStorage.setItem("noteDeleteImage", "images/deleteDark.svg");
-        });
-      }
-      if (journalEditImage) {
-        journalEditImage.forEach((button) => {
-          button.src = "images/editNoteDark.svg";
-          localStorage.setItem("journalEditImage", "images/editNoteDark.svg");
-        });
-      }
-      if (journalDeleteImage) {
-        journalDeleteImage.forEach((button) => {
-          button.src = "images/deleteDark.svg";
-          localStorage.setItem("journalDeleteImage", "images/deleteDark.svg");
-        });
-      }
-      if (todoEditImage) {
-        todoEditImage.forEach((button) => {
-          button.src = "images/editNoteDark.svg";
-          localStorage.setItem("todoEditImage", "images/editNoteDark.svg");
-        });
-      }
-      if (todoDeleteImage) {
-        todoDeleteImage.forEach((button) => {
-          button.src = "images/deleteDark.svg";
-          localStorage.setItem("todoDeleteImage", "images/deleteDark.svg");
-        });
-      }
-      if (emptyNoteAdd) {
-        emptyNoteAdd.src = "images/emptyNoteDark.svg";
-        localStorage.setItem("emptyNoteAdd", "images/emptyNoteDark.svg");
-      }
-
-    } else {
-      document.body.classList.replace('light', 'dark');
-      addEntryImage.src = "images/addNoteLight.svg";
-      searchbutton.src = "images/searchLight.svg";
-      theme.src = "images/darkMode.svg";
-      localStorage.setItem("userTheme", "dark");
-      localStorage.setItem("addEntryImage", "images/addNoteLight.svg");
-      localStorage.setItem("searchbutton", "images/searchLight.svg");
-      localStorage.setItem("theme", "images/darkMode.svg");
-      menu.src = "images/menuLight.svg";
-      localStorage.setItem("menu", "images/menuLight.svg");
-      daySelectImage.src = "images/daySelectionLight.svg";
-      localStorage.setItem("daySelectImage", "images/daySelectionLight.svg");
-      catagorySelectImage.src = "images/catagoryIconLight.svg";
-      localStorage.setItem("catagorySelectImage", "images/catagoryIconLight.svg");
-      dropDownIcon.forEach((icon) => {
-        icon.src = "images/dropDownLight.svg";
-        localStorage.setItem("dropDownIcon", "images/dropDownLight.svg");
-      });
-
-      if (noteEditImage) {
-        noteEditImage.forEach((button) => {
-          button.src = "images/editNoteLight.svg";
-          localStorage.setItem("noteEditImage", "images/editNoteLight.svg");
-        })
-      }
-      if (noteDeleteImage) {
-        noteDeleteImage.forEach((button) => {
-          button.src = "images/deleteLight.svg";
-          localStorage.setItem("noteDeleteImage", "images/deleteLight.svg");
-        })
-      }
-      if (journalEditImage) {
-        journalEditImage.forEach((button) => {
-          button.src = "images/editNoteLight.svg";
-          localStorage.setItem("journalEditImage", "images/editNoteLight.svg");
-        })
-      }
-      if (journalDeleteImage) {
-        journalDeleteImage.forEach((button) => {
-          button.src = "images/deleteLight.svg";
-          localStorage.setItem("journalDeleteImage", "images/deleteLight.svg");
-        })
-      }
-      if (todoEditImage) {
-        todoEditImage.forEach((button) => {
-          button.src = "images/editNoteLight.svg";
-          localStorage.setItem("todoEditImage", "images/editNoteLight.svg");
-        })
-      }
-      if (todoDeleteImage) {
-        todoDeleteImage.forEach((button) => {
-          button.src = "images/deleteLight.svg";
-          localStorage.setItem("todoDeleteImage", "images/deleteLight.svg");
-        })
-      }
-      if (emptyNoteAdd) {
-        emptyNoteAdd.src = "images/emptyNoteLight.svg";
-        localStorage.setItem("emptyNoteAdd", "images/emptyNoteLight.svg");
-      }
-
-    };
-
-  });
-
-};
-
-
-const typeSelector = document.querySelectorAll(".typeSelection").forEach((button) => {
-  button.addEventListener("click", () => {
-    const type = button.textContent.trim().toLowerCase();
-    // console.log(type);
-    typeFunctionHandler(type);
-  });
-
-});
-
-
-function typeFunctionHandler(type) {
-
-  let presentableObject;
-
-  if (type === 'all') {
-    presentableObject = localDataArray;
-  } else {
-    presentableObject = localDataArray.filter((el) => {
-      return el.catagory === type;
-    });
-  }
-
-  const card = document.querySelectorAll(".noteContainer,.todoContainer,.journalContainer");
-  const warning = document.querySelector("#warning");
-
-  card.forEach((element) => {
-    element.remove();
-  });
-
-
-  if (presentableObject.length === 0) {
-    if (warning) warning.style.display = "flex";
-  }
-  else {
-    if (warning) warning.style.display = "none";
-
-  }
-
-  presentableObject.forEach((element) => {
-
-    switch (element.catagory) {
-
-      case "note":
-        noteUI(element.text, element.heading, element.id, element.date, element.time, element.catagory);
-        break;
-      case "journal":
-        journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.catagory);
-        break;
-      case "todo":
-
-        todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.catagory);
-        break;
-
-    };
+  themeBtn.addEventListener("click", () => {
+    const isDark = document.body.classList.contains("dark");
+    document.body.classList.replace(isDark ? "dark" : "light", isDark ? "light" : "dark");
+    localStorage.setItem("userTheme", isDark ? "light" : "dark");
+    themeBtn.innerHTML = isDark ? sunSVG : moonSVG;
   });
 }
+
+/* ─── Category filter ───────────────────────────────────────── */
+document.querySelectorAll(".typeSelection").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    typeFunctionHandler(btn.textContent.trim().toLowerCase());
+  });
+});
+
+function typeFunctionHandler(type) {
+  const filtered = type === "all"
+    ? localDataArray
+    : localDataArray.filter((el) => el.catagory === type);
+
+  document.querySelectorAll(".noteContainer,.todoContainer,.journalContainer")
+    .forEach((el) => el.remove());
+
+  const warning = document.querySelector("#warning");
+  if (filtered.length === 0) {
+    if (warning) warning.style.display = "flex";
+  } else {
+    if (warning) warning.style.display = "none";
+    filtered.forEach(renderEntry);
+  }
+}
+
+/* ─── Search ────────────────────────────────────────────────── */
+function searchInit() {
+  const searchInput = document.querySelector("#search");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.trim().toLowerCase();
+
+    document.querySelectorAll(".noteContainer,.todoContainer,.journalContainer")
+      .forEach((el) => el.remove());
+
+    const warning = document.querySelector("#warning");
+    const results = query === ""
+      ? localDataArray
+      : localDataArray.filter((el) =>
+        (el.heading || "").toLowerCase().includes(query) ||
+        (el.text || "").toLowerCase().includes(query)
+      );
+
+    if (results.length === 0) {
+      if (warning) warning.style.display = "flex";
+    } else {
+      if (warning) warning.style.display = "none";
+      results.forEach(renderEntry);
+    }
+  });
+}
+
+/* ─── Card show-up animation ────────────────────────────────── */
+const style = document.createElement("style");
+style.textContent = `
+  .activeShowUp {
+    animation: cardIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+`;
+document.head.appendChild(style);

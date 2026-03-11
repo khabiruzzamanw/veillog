@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
   <title>Journix</title>
 </head>
 
@@ -13,11 +13,17 @@
   <header>
     <nav>
       <ul>
-        <li class="">
-          <a href="#home" class="home">Home</a>
+        <li>
+          <a href="#home" class="home">Journix</a>
         </li>
         <li>
-          <img src="images/darkMode.svg" class="theme" id="theme" alt="">
+          <!-- Theme toggle — sun/moon inline SVG, swapped via JS -->
+          <svg id="theme" class="theme" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+            <circle cx="12" cy="12" r="4" />
+            <path
+              d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+          </svg>
         </li>
         <li class="navActions">
           <button id="exportBtn" class="navBtn" title="Export notes">Export</button>
@@ -34,44 +40,76 @@
     <aside class="sideBar" id="sideBar">
 
       <div class="sideBarButton" id="sideBarButton">
-        <img src="images/menuLight.svg" class="menu" id="menu" alt="">
+        <!-- Hamburger -->
+        <svg id="menu" class="menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" width="20" height="20">
+          <line x1="4" y1="7" x2="20" y2="7" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="17" x2="20" y2="17" />
+        </svg>
       </div>
 
       <div class="addEntry" id="addEntry">
-        <img src="images/addNoteLight.svg" alt="" class="addEntryImage">
-        <p class="mutedText">Do a entry</p>
+        <!-- Plus icon -->
+        <svg class="addEntryImage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" width="16" height="16">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        <p class="mutedText">New entry</p>
       </div>
 
       <div class="searchBar">
-        <img src="images/searchLight.svg" id="searchbutton" class="searchbutton" alt="">
-        <input type="search" name="" id="search" class="search" placeholder="Search" />
+        <!-- Search icon -->
+        <svg class="searchbutton" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" width="14" height="14">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="16.5" y1="16.5" x2="22" y2="22" />
+        </svg>
+        <input type="search" id="search" class="search" placeholder="Search" />
       </div>
 
       <div class="daySelect">
         <div class="dropDownToggler">
-          <img src="images/daySelectionLight.svg" alt="" class="daySelectImage">
+          <!-- Calendar icon -->
+          <svg class="daySelectImage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" width="14" height="14">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
           <p class="mutedText">Timeline</p>
-          <img src="images/dropDownLight.svg" alt="" class="dropDownIcon">
+          <!-- Chevron -->
+          <svg class="dropDownIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" width="12" height="12">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
         </div>
-
-        <div class="daySelectGrid  dropDown">
+        <div class="daySelectGrid dropDown">
           <ul>
-            <li class="">Today</li>
-            <li class="">Yesterday</li>
-            <li class="">Last Week</li>
-            <li class="">Last month</li>
+            <li>Today</li>
+            <li>Yesterday</li>
+            <li>Last week</li>
+            <li>Last month</li>
           </ul>
-
         </div>
       </div>
 
       <div class="catagorySelect">
         <div class="dropDownToggler">
-          <img src="images/catagoryIconLight.svg" alt="" class="catagorySelectImage">
-          <p class="mutedText">Catagory</p>
-          <img src="images/dropDownLight.svg" alt="" class="dropDownIcon">
+          <!-- Tag icon -->
+          <svg class="catagorySelectImage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" width="14" height="14">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+            <circle cx="7" cy="7" r="1.5" fill="currentColor" />
+          </svg>
+          <p class="mutedText">Category</p>
+          <svg class="dropDownIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" width="12" height="12">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
         </div>
-
         <div class="catagorySelectGrid dropDown">
           <ul>
             <li class="typeSelection noteType">All</li>
@@ -79,7 +117,6 @@
             <li class="typeSelection todoType">Todo</li>
             <li class="typeSelection journalType">Journal</li>
           </ul>
-
         </div>
       </div>
 
@@ -87,19 +124,23 @@
 
 
     <section class="contentPage" id="contentPage">
-
       <div class="warning" id="warning">
-        <img src="images/emptyNoteLight.svg" alt="" class="emptyNoteAdd" id="emptyNoteAdd">
-        <p>No notes yet</p>
-        <p>Start capturing your thoughts.</p>
+        <!-- Empty state icon -->
+        <svg class="emptyNoteAdd" id="emptyNoteAdd" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1" stroke-linecap="round" width="48" height="48">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="12" y1="11" x2="12" y2="17" />
+          <line x1="9" y1="14" x2="15" y2="14" />
+        </svg>
+        <p>Nothing here yet</p>
+        <p>Start capturing your thoughts</p>
       </div>
-
     </section>
 
   </main>
 
   <script src="index.js"></script>
-
 </body>
 
 </html>
