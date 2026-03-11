@@ -3,30 +3,21 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100..800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon_32.png">
-  <link rel="icon" type="image/png" sizes="64x64" href="images/favicon_64.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon_180.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <title>Journix</title>
 </head>
 
 <body id="home" class="dark">
+
   <header>
     <nav>
       <ul>
-        <li class=""><a href="#home" class="">Home</a></li>
-        <li class="searchBar">
-          <span>
-            <input type="search" name="" id="search" class="search" placeholder="Search" />
-          </span>
-          <span>
-            <img src="images/searchLight.svg" id="searchbutton" class="searchbutton" alt="">
-          </span>
+        <li class="">
+          <a href="#home" class="home">Home</a>
+        </li>
+        <li>
+          <img src="images/darkMode.svg" class="theme" id="theme" alt="">
         </li>
         <li class="navActions">
           <button id="exportBtn" class="navBtn" title="Export notes">Export</button>
@@ -39,32 +30,72 @@
   </header>
 
   <main>
-    <section class="mainPage" id="mainPage">
-      <section id="noteCreation" class="noteCreation">
 
-        <div class="inputItem " id="inputItem">
-          <input type="text" id="headingInput" class="headingInput" placeholder="Write your Note heading" />
-          <textarea name="" id="textInput" class="textInput" placeholder="Your Journal context"></textarea>
-          <button id="addButton" class="addButton">Add</button>
+    <aside class="sideBar" id="sideBar">
+
+      <div class="sideBarButton" id="sideBarButton">
+        <img src="images/menuLight.svg" class="menu" id="menu" alt="">
+      </div>
+
+      <div class="addEntry" id="addEntry">
+        <img src="images/addNoteLight.svg" alt="" class="addEntryImage">
+        <p class="mutedText">Do a entry</p>
+      </div>
+
+      <div class="searchBar">
+        <img src="images/searchLight.svg" id="searchbutton" class="searchbutton" alt="">
+        <input type="search" name="" id="search" class="search" placeholder="Search" />
+      </div>
+
+      <div class="daySelect">
+        <div class="dropDownToggler">
+          <img src="images/daySelectionLight.svg" alt="" class="daySelectImage">
+          <p class="mutedText">Timeline</p>
+          <img src="images/dropDownLight.svg" alt="" class="dropDownIcon">
         </div>
 
-        <div id="addNote" class="addNote">
-          <img src="images/addNoteLight.svg" id="addNoteButton" class="addNoteButton" alt="">
+        <div class="daySelectGrid  dropDown">
+          <ul>
+            <li class="">Today</li>
+            <li class="">Yesterday</li>
+            <li class="">Last Week</li>
+            <li class="">Last month</li>
+          </ul>
+
+        </div>
+      </div>
+
+      <div class="catagorySelect">
+        <div class="dropDownToggler">
+          <img src="images/catagoryIconLight.svg" alt="" class="catagorySelectImage">
+          <p class="mutedText">Catagory</p>
+          <img src="images/dropDownLight.svg" alt="" class="dropDownIcon">
         </div>
 
-      </section>
+        <div class="catagorySelectGrid dropDown">
+          <ul>
+            <li class="typeSelection noteType">All</li>
+            <li class="typeSelection noteType">Note</li>
+            <li class="typeSelection todoType">Todo</li>
+            <li class="typeSelection journalType">Journal</li>
+          </ul>
 
-      <section id="savedDiarySection" class="savedDiarySection">
- <div id="savedDiary" class="savedDiary"></div>
-        <div class="warning" id="warning">
-          <img src="images/emptyNoteLight.svg" alt="" class="emptyNoteAdd" id="emptyNoteAdd">
-          <p>No notes yet</p>
-          <p>Start capturing your thoughts.</p>
         </div>
-       
+      </div>
 
-      </section>
+    </aside>
+
+
+    <section class="contentPage" id="contentPage">
+
+      <div class="warning" id="warning">
+        <img src="images/emptyNoteLight.svg" alt="" class="emptyNoteAdd" id="emptyNoteAdd">
+        <p>No notes yet</p>
+        <p>Start capturing your thoughts.</p>
+      </div>
+
     </section>
+
   </main>
 
   <script src="index.js"></script>
