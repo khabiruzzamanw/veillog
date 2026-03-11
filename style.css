@@ -19,8 +19,6 @@
 }
 
 
-
-
 .light {
   --header-height: 80px;
 
@@ -546,6 +544,7 @@ aside>div {
 .typeSelectionWrapper>div:hover {
   background: var(--button);
   border-color: var(--accent);
+  cursor: pointer;
 }
 
 .noteContainer {

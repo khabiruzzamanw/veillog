@@ -54,38 +54,25 @@ function noteCreation() {
 
         switch (button.textContent.trim().toLowerCase()) {
           case "note":
-            // noteCreationForm();
-            // formShow(containerName, wrapperName, value, textName);
             formShow("noteInputContainer", "noteInputWrapper", true, "noteTextInput", "note");
 
             break;
           case "journal":
-            // journalCreationForm();
-            // formShow(containerName, wrapperName, value, textName);
             formShow("journalInputContainer", "journalInputWrapper", true, "journalTextInput", "journal");
 
             break;
           case "todo":
-            // todoCreationForm();
-            // formShow(containerName, wrapperName, value, textName);
             formShow("todoInputContainer", "todoInputWrapper", false, "todoTextInput", "todo");
             break;
 
           default:
-            // noteCreationForm();
             formShow("noteInputContainer", "noteInputWrapper", true, "noteTextInput", "note");
             break;
         }
-
         bluredBg.remove();
       });
-
-
     });
-
   }
-
-
 
   function formShow(containerName, wrapperName, value, textName, type) {
 
@@ -121,7 +108,6 @@ function noteCreation() {
       headInput.style.display = "none";
     }
 
-
     wrapper.append(headInput);
     wrapper.append(textInput);
     noteButtons.append(closeButton);
@@ -148,7 +134,7 @@ function noteCreation() {
 
       const timeDateDigit = new Date();
       const timeDigit = timeDateDigit.toLocaleTimeString();
-      const dateDigit = timeDateDigit.toLocaleDateString('en-Gb').replace(/\//g, ".");
+      const dateDigit = timeDateDigit.toLocaleDateString('en-GB').replace(/\//g, ".");
       const numberedDate = timeDateDigit.getDate();
       const monthText = timeDateDigit.toLocaleDateString('en-GB', { month: 'long' });
       const dayText = timeDateDigit.toLocaleDateString('en-GB', { weekday: 'long' });
@@ -183,7 +169,6 @@ function noteCreation() {
             journalUI(obj.heading, obj.text, obj.day, obj.month, obj.dateNumber, obj.date, obj.time, obj.id, obj.catagory);
             break;
           case "todo":
-            // todoUI(text,date,time,todoDueTime,id,type) ;
             todoUI(obj.text, obj.date, obj.time, obj.todoDueTime, obj.id, obj.catagory);
             break;
 
@@ -191,8 +176,6 @@ function noteCreation() {
             noteUI(obj.text, obj.heading, obj.id, obj.date, obj.time, obj.catagory);
             break;
         }
-
-        // noteUI(obj.text, obj.heading, obj.id, obj.date, obj.time);
         toastFunction(`${type} is added`, "addToast");
 
         textInput.value = "";
@@ -204,10 +187,7 @@ function noteCreation() {
     });
 
   };
-
 };
-
-
 
 
 function setData(localDataArray) {
@@ -235,7 +215,6 @@ function getData(localDataArray) {
         break;
 
     }
-    // noteUI(element.text, element.heading, element.id, element.date, element.time);
   });
 };
 
@@ -405,8 +384,7 @@ function journalUI(headingText, text, day, month, dateNumber, date, time, id, ty
     });
 
   };
-}
-
+};
 
 
 function todoUI(text, date, time, todoDueTime, id, type) {
@@ -558,7 +536,7 @@ function todoUI(text, date, time, todoDueTime, id, type) {
     });
 
   };
-}
+};
 
 
 function noteUI(text, headingText, id, date, time, type) {
@@ -727,7 +705,6 @@ function noteUI(text, headingText, id, date, time, type) {
   };
 
 };
-
 
 
 function toastFunction(message, name) {
@@ -950,3 +927,61 @@ function themeChanger() {
   });
 
 };
+
+
+const typeSelector = document.querySelectorAll(".typeSelection").forEach((button) => {
+  button.addEventListener("click", () => {
+    const type = button.textContent.trim().toLowerCase();
+    // console.log(type);
+    typeFunctionHandler(type);
+  });
+
+});
+
+
+function typeFunctionHandler(type) {
+
+  let presentableObject;
+
+  if (type === 'all') {
+    presentableObject = localDataArray;
+  } else {
+    presentableObject = localDataArray.filter((el) => {
+      return el.catagory === type;
+    });
+  }
+
+  const card = document.querySelectorAll(".noteContainer,.todoContainer,.journalContainer");
+  const warning = document.querySelector("#warning");
+
+  card.forEach((element) => {
+    element.remove();
+  });
+
+
+  if (presentableObject.length === 0) {
+    if (warning) warning.style.display = "flex";
+  }
+  else {
+    if (warning) warning.style.display = "none";
+
+  }
+
+  presentableObject.forEach((element) => {
+
+    switch (element.catagory) {
+
+      case "note":
+        noteUI(element.text, element.heading, element.id, element.date, element.time, element.catagory);
+        break;
+      case "journal":
+        journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.catagory);
+        break;
+      case "todo":
+
+        todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.catagory);
+        break;
+
+    };
+  });
+}
