@@ -150,7 +150,7 @@ function noteCreation() {
           id: Date.now(),
           date: dateDigit,
           time: timeDigit,
-          catagory: type,
+          category: type,
           dateNumber: numberedDate,
           month: monthText,
           day: dayText,
@@ -161,19 +161,19 @@ function noteCreation() {
 
         setData(localDataArray);
 
-        switch (obj.catagory) {
+        switch (obj.category) {
           case "note":
-            noteUI(obj.text, obj.heading, obj.id, obj.date, obj.time, obj.catagory);
+            noteUI(obj.text, obj.heading, obj.id, obj.date, obj.time, obj.category);
             break;
           case "journal":
-            journalUI(obj.heading, obj.text, obj.day, obj.month, obj.dateNumber, obj.date, obj.time, obj.id, obj.catagory);
+            journalUI(obj.heading, obj.text, obj.day, obj.month, obj.dateNumber, obj.date, obj.time, obj.id, obj.category);
             break;
           case "todo":
-            todoUI(obj.text, obj.date, obj.time, obj.todoDueTime, obj.id, obj.catagory);
+            todoUI(obj.text, obj.date, obj.time, obj.todoDueTime, obj.id, obj.category);
             break;
 
           default:
-            noteUI(obj.text, obj.heading, obj.id, obj.date, obj.time, obj.catagory);
+            noteUI(obj.text, obj.heading, obj.id, obj.date, obj.time, obj.category);
             break;
         }
         toastFunction(`${type} is added`, "addToast");
@@ -197,21 +197,21 @@ function setData(localDataArray) {
 
 function getData(localDataArray) {
   localDataArray.forEach((element, index) => {
-    switch (element.catagory) {
+    switch (element.category) {
 
       case "note":
-        noteUI(element.text, element.heading, element.id, element.date, element.time, element.catagory);
+        noteUI(element.text, element.heading, element.id, element.date, element.time, element.category);
         break;
       case "journal":
-        journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.catagory);
+        journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.category);
         break;
       case "todo":
 
-        todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.catagory);
+        todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.category);
         break;
 
       default:
-        noteUI(element.text, element.heading, element.id, element.date, element.time, element.catagory);
+        noteUI(element.text, element.heading, element.id, element.date, element.time, element.category);
         break;
 
     }
@@ -720,9 +720,64 @@ function toastFunction(message, name) {
 function toggles() {
   const menu = document.querySelector(".menu");
   const sideBar = document.querySelector(".sideBar");
+  const searchbutton = document.querySelector(".searchbutton");
+  const search = document.querySelector(".search");
   const dropDownToggler = document.querySelectorAll(".dropDownToggler");
 
-  menu.addEventListener("click", () => {
+  menu.addEventListener("click", sideBarToggle);
+  searchbutton.addEventListener("click", () => {
+    sideBarToggle();
+  });
+
+  search.addEventListener("input", () => {
+    search.value.trim().toLowerCase();
+
+    let searchedItems = localDataArray.filter((element) => {
+      return element.heading.toLowerCase().includes(search.value.trim().toLowerCase()) || element.text.toLowerCase().includes(search.value.trim().toLowerCase());
+    });
+
+    const card = document.querySelectorAll(".noteContainer,.todoContainer,.journalContainer");
+    const warning = document.querySelector("#warning");
+
+    card.forEach((element) => {
+      element.remove();
+    });
+
+
+    if (searchedItems.length === 0) {
+      if (warning) warning.style.display = "flex";
+    }
+    else {
+      if (warning) warning.style.display = "none";
+
+    }
+
+
+
+    searchedItems.forEach((element) => {
+
+      switch (element.category) {
+
+        case "note":
+          noteUI(element.text, element.heading, element.id, element.date, element.time, element.category);
+          break;
+        case "journal":
+          journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.category);
+          break;
+        case "todo":
+
+          todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.category);
+          break;
+
+      };
+
+    });
+
+    // console.log(search.value.trim().toLowerCase());
+
+  });
+
+  function sideBarToggle() {
     if (sideBar.classList.contains("hide")) {
       sideBar.classList.remove("hide");
       menu.classList.remove("dropDownOpen");
@@ -730,10 +785,9 @@ function toggles() {
       dropDownClose();
       sideBar.classList.add("hide");
       menu.classList.add("dropDownOpen");
-
     }
+  };
 
-  });
 
   dropDownToggler.forEach((toggle) => {
     toggle.addEventListener("click", () => {
@@ -773,7 +827,7 @@ function themeChanger() {
   const emptyNoteAdd = document.querySelector(".emptyNoteAdd");
   const menu = document.querySelector(".menu");
   const daySelectImage = document.querySelector(".daySelectImage");
-  const catagorySelectImage = document.querySelector(".catagorySelectImage");
+  const categorySelectImage = document.querySelector(".categorySelectImage");
   const dropDownIcon = document.querySelectorAll(".dropDownIcon");
 
 
@@ -784,7 +838,7 @@ function themeChanger() {
   emptyNoteAdd.src = localStorage.getItem("emptyNoteAdd") || "images/emptyNoteLight.svg";
   menu.src = localStorage.getItem("menu") || "images/menuLight.svg";
   daySelectImage.src = localStorage.getItem("daySelectImage") || "images/daySelectionLight.svg";
-  catagorySelectImage.src = localStorage.getItem("catagorySelectImage") || "images/catagoryIconLight.svg";
+  categorySelectImage.src = localStorage.getItem("categorySelectImage") || "images/categoryIconLight.svg";
   theme.src = localStorage.getItem("theme") || "images/darkMode.svg";
   dropDownIcon.forEach((icon) => {
     icon.src = localStorage.getItem("dropDownIcon") || "images/dropDownLight.svg";
@@ -813,8 +867,8 @@ function themeChanger() {
       localStorage.setItem("menu", "images/menuDark.svg");
       daySelectImage.src = "images/daySelectionDark.svg";
       localStorage.setItem("daySelectImage", "images/daySelectionDark.svg");
-      catagorySelectImage.src = "images/catagoryIconDark.svg";
-      localStorage.setItem("catagorySelectImage", "images/catagoryIconDark.svg");
+      categorySelectImage.src = "images/categoryIconDark.svg";
+      localStorage.setItem("categorySelectImage", "images/categoryIconDark.svg");
       dropDownIcon.forEach((icon) => {
         icon.src = "images/dropDownDark.svg";
         localStorage.setItem("dropDownIcon", "images/dropDownDark.svg");
@@ -874,8 +928,8 @@ function themeChanger() {
       localStorage.setItem("menu", "images/menuLight.svg");
       daySelectImage.src = "images/daySelectionLight.svg";
       localStorage.setItem("daySelectImage", "images/daySelectionLight.svg");
-      catagorySelectImage.src = "images/catagoryIconLight.svg";
-      localStorage.setItem("catagorySelectImage", "images/catagoryIconLight.svg");
+      categorySelectImage.src = "images/categoryIconLight.svg";
+      localStorage.setItem("categorySelectImage", "images/categoryIconLight.svg");
       dropDownIcon.forEach((icon) => {
         icon.src = "images/dropDownLight.svg";
         localStorage.setItem("dropDownIcon", "images/dropDownLight.svg");
@@ -947,7 +1001,7 @@ function typeFunctionHandler(type) {
     presentableObject = localDataArray;
   } else {
     presentableObject = localDataArray.filter((el) => {
-      return el.catagory === type;
+      return el.category === type;
     });
   }
 
@@ -969,17 +1023,17 @@ function typeFunctionHandler(type) {
 
   presentableObject.forEach((element) => {
 
-    switch (element.catagory) {
+    switch (element.category) {
 
       case "note":
-        noteUI(element.text, element.heading, element.id, element.date, element.time, element.catagory);
+        noteUI(element.text, element.heading, element.id, element.date, element.time, element.category);
         break;
       case "journal":
-        journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.catagory);
+        journalUI(element.heading, element.text, element.day, element.month, element.dateNumber, element.date, element.time, element.id, element.category);
         break;
       case "todo":
 
-        todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.catagory);
+        todoUI(element.text, element.date, element.time, element.todoDueTime, element.id, element.category);
         break;
 
     };
