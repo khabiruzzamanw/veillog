@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Journix</title>
+</head>
+
+<body id="home" class="dark">
+
+  <header>
+    <nav>
+      <ul>
+        <li class="">
+          <a href="#home" class="home">Home</a>
+        </li>
+        <li>
+          <img src="images/darkMode.svg" class="theme" id="theme" alt="">
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <aside class="sideBar" id="sideBar">
+
+      <div class="sideBarButton" id="sideBarButton">
+        <img src="images/menuLight.svg" class="menu tabIcon" id="menu" alt="">
+      </div>
+
+      <div class="addEntry" id="addEntry">
+        <img src="images/addNoteLight.svg" alt="" class="addEntryImage tabIcon">
+        <p class="mutedText">Do a entry</p>
+      </div>
+
+      <div class="searchBar">
+        <img src="images/searchLight.svg" id="searchbutton" class="searchbutton tabIcon" alt="">
+        <input type="search" name="" id="search" class="search" placeholder="Search" />
+      </div>
+
+      <div class="daySelect">
+        <div class="dropDownToggler">
+          <img src="images/daySelectionLight.svg" alt="" class="daySelectImage tabIcon">
+          <p class="mutedText">Timeline</p>
+          <img src="images/dropDownLight.svg" alt="" class="dropDownIcon">
+        </div>
+
+        <div class="daySelectGrid  dropDown">
+          <ul>
+            <li class="">Today</li>
+            <li class="">Yesterday</li>
+            <li class="">Last Week</li>
+            <li class="">Last month</li>
+          </ul>
+
+        </div>
+      </div>
+
+      <div class="categorySelect">
+        <div class="dropDownToggler">
+          <img src="images/categoryIconLight.svg" alt="" class="categorySelectImage tabIcon">
+          <p class="mutedText">Category</p>
+          <img src="images/dropDownLight.svg" alt="" class="dropDownIcon">
+        </div>
+
+        <div class="categorySelectGrid dropDown">
+          <ul>
+            <li class="typeSelection allType">All</li>
+            <li class="typeSelection noteType">Note</li>
+            <li class="typeSelection todoType">Todo</li>
+            <li class="typeSelection journalType">Journal</li>
+          </ul>
+
+        </div>
+      </div>
+
+    </aside>
+
+
+    <section class="contentPage" id="contentPage">
+
+      <div class="warning" id="warning">
+        <img src="images/emptyNoteLight.svg" alt="" class="emptyNoteAdd" id="emptyNoteAdd">
+        <p>No notes yet</p>
+        <p>Start capturing your thoughts.</p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="index.js"></script>
+
+</body>
+
+</html>

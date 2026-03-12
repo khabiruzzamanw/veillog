@@ -1,0 +1,1082 @@
+:root {
+  --header-height: 65px;
+
+  --bg: #080808;
+  --blured: rgba(0, 0, 0, 0.65);
+  --accent: #a93226;
+  --surface: #111111;
+  --surface-muted: #0d0d0d;
+  --text: #f0f0f0;
+  --text-muted: #555555;
+  --border: rgba(255, 255, 255, 0.07);
+  --button: #080808;
+  --closeButton: #a93226;
+  --saveButton: #1a1a1a;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --deleteToast: #a93226;
+  --addToast: #555555;
+  --note-accent: #c9843a;
+  --journal-accent: #6b8f6b;
+  --todo-accent: #4a7fa5;
+  --surface-hovered: #1a1a1a;
+  --border-hovered: rgba(255, 255, 255, 0.13);
+  --button-hovered: #111111;
+
+}
+
+
+.light {
+  --header-height: 65px;
+
+  --bg: #f7f7f5;
+  --blured: rgba(0, 0, 0, 0.45);
+  --accent: #2563eb;
+  --surface: #ffffff;
+  --surface-muted: #f0f0ee;
+  --text: #111111;
+  --text-muted: #aaaaaa;
+  --border: rgba(0, 0, 0, 0.08);
+  --button: #f7f7f5;
+  --closeButton: #1a56db;
+  --saveButton: #f0f0ee;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  --deleteToast: #1a56db;
+  --addToast: #aaaaaa;
+  --note-accent: #b8651a;
+  --journal-accent: #4a7a4a;
+  --todo-accent: #2563eb;
+  --surface-hovered: #ebebea;
+  --border-hovered: rgba(0, 0, 0, 0.15);
+  --button-hovered: #ebebea;
+}
+
+
+* {
+  padding: 0px;
+  margin: 0px;
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: sans-serif;
+  transition: all 0.2s ease-in;
+}
+
+header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  background: var(--blured);
+  backdrop-filter: blur(10px);
+  position: -webkit-sticky;
+  z-index: 200;
+  border-bottom: 1px solid var(--border);
+  height: var(--header-height);
+}
+
+nav {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+nav ul {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0 2rem 0 12rem;
+}
+
+nav ul li {}
+
+nav ul li a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.home {
+  font-size: 1.5rem;
+  font-family: sans-serif;
+  color: var(--accent);
+}
+
+.theme {
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.2s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme:hover {
+  opacity: 1;
+  transform: rotate(25deg) scale(1.1);
+}
+
+main {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+aside {
+  width: 10vw;
+  height: calc(100vh - var(--header-height));
+  background: var(--surface);
+  position: sticky;
+  top: var(--header-height);
+  bottom: 0;
+  left: 0;
+  position: -webkit-sticky;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  border-right: 1px solid var(--border);
+  padding: 0 1rem 2rem 1rem;
+  overflow: hidden;
+  transition: all 0.25s ease-in-out;
+  text-wrap: nowrap;
+  --font: 0.85rem;
+}
+
+.tabIcon {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+
+
+.tabIcon:hover {
+  background: var(--button);
+}
+
+.mutedText {
+  color: var(--text-muted);
+  font-size: var(--font);
+}
+
+.sideBarButton {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 2rem;
+  border: none;
+}
+
+.addEntry {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+  cursor: pointer;
+}
+
+aside>div {
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+}
+
+.searchBar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+  transition: background 0.25s ease-in-out;
+}
+
+.searchBar:focus-within {
+  background: var(--surface-muted);
+}
+
+.search {
+  background: transparent;
+  color: var(--text);
+  border: none;
+  outline: none;
+}
+
+.search::placeholder {
+  font-size: var(--font);
+  color: var(--text-muted);
+}
+
+.dropDownToggler {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  column-gap: 1rem;
+}
+
+.dropDown {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: all 0.25s ease-in-out;
+
+}
+
+.dropDown ul {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0 0 3rem;
+  row-gap: 0.5rem;
+  list-style-type: none;
+}
+
+.dropDown ul li {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: all 0.25s ease-in-out;
+}
+
+.dropDown ul li:hover {
+  background: var(--button);
+}
+
+.dropDown>* {
+
+  overflow: hidden;
+}
+
+.dropDownIcon {
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  opacity: 0.5;
+  transition: all 0.25s ease-in-out;
+}
+
+.dropDownIcon:hover {
+  background: var(--button);
+  opacity: 0.75;
+}
+
+.toggled {
+  grid-template-rows: 1fr;
+}
+
+.dropDownOpen {
+  transform: rotate(-180deg);
+}
+
+.hide {
+  width: 3.5vw;
+  overflow: hidden;
+  text-wrap: nowrap;
+}
+
+.contentPage {
+  columns: 3;
+  column-gap: 2rem;
+  padding: 2.5rem;
+}
+
+.noteContainer,
+.journalContainer,
+.todoContainer {
+  break-inside: avoid;
+  margin-bottom: 2rem;
+}
+
+.emptyNoteAdd {
+  width: 10rem;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.warning {
+  width: 100%;
+  column-span: all;
+  height: calc(100vh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.warning p {
+  font-size: 2rem;
+  color: var(--text-muted);
+}
+
+
+.headInput {
+  width: 100%;
+  background: transparent;
+  padding: 0.5rem;
+  color: var(--text);
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  transition: all 0.25s ease-in;
+}
+
+
+.noteButtons {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.closeButton {
+  background: var(--closeButton);
+  padding: 0.5rem 1rem;
+  color: var(--text);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.25s ease-in;
+}
+
+.saveButton {
+  background: var(--saveButton);
+  padding: 0.5rem 1rem;
+  color: var(--text);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.25s ease-in;
+}
+
+.saveButton:hover {
+  background: var(--button-hovered);
+}
+
+.closeButton:hover {
+  background: var(--button-hovered);
+}
+
+.bluredBg {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  background: var(--blured);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500;
+  animation: show 0.25s ease-in both;
+}
+
+
+.bluredBg>* {
+  position: relative;
+  z-index: 501;
+}
+
+.typeSelectionContainer {
+  width: 25%;
+  display: flex;
+  background: var(--surface-muted);
+  flex-direction: column;
+  row-gap: 2rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  animation: modalShow 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.typeSelectionHead {
+  text-align: center;
+  font-size: 1.5rem;
+  font-family: sans-serif;
+  border-bottom: 1px solid var(--border);
+
+}
+
+.typeSelectionWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 1rem;
+}
+
+.typeSelectionWrapper>div {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  transition: all 0.25s ease-in;
+}
+
+.typeSelectionWrapper>div:hover {
+  background: var(--button-hovered);
+  border-color: var(--border-hovered);
+  cursor: pointer;
+}
+
+
+
+.dividerLine {
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  opacity: 0.6;
+}
+
+.createdData {
+  font-family: sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0.5rem;
+}
+
+.correction {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.icon {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  opacity: 0.5;
+}
+
+.icon:hover {
+  background: var(--button);
+  opacity: 0.75;
+}
+
+.deleteToast {
+  position: fixed;
+  bottom: 5rem;
+  right: 1rem;
+  z-index: 300;
+  animation: toastAnimation 5s ease-in-out both;
+  background: var(--blured);
+  backdrop-filter: blur(4px);
+
+}
+
+.deleteToast p {
+  padding: 0.25rem 0.5rem;
+  border-left: 0.25rem solid var(--deleteToast);
+}
+
+.addToast {
+  position: fixed;
+  bottom: 2rem;
+  right: 1rem;
+  z-index: 300;
+  animation: toastAnimation 5s ease-in-out both;
+  background: var(--blured);
+  backdrop-filter: blur(4px);
+}
+
+
+.addToast p {
+  padding: 0.25rem 0.5rem;
+  border-left: 0.25rem solid var(--addToast);
+}
+
+.activeShowUp {
+  animation: showUp 0.3s ease-in;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* =================================================The noteStyle ========================================================================================================= */
+.noteContainer {
+  width: 100%;
+  background-color: var(--surface);
+  border-radius: 1rem;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: clip;
+  border: 2px solid transparent;
+  border-top: 2px solid var(--note-accent);
+  transition: all 0.25s ease-in-out;
+}
+
+.noteContainer:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-4px);
+  border-color: var(--border-hovered);
+}
+
+.note {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  padding: 1rem;
+}
+
+.noteHead {
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+  font-family: sans-serif;
+}
+
+.notePara {
+  width: 100%;
+  font-size: 1rem;
+  opacity: 0.9;
+  font-family: sans-serif;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.noteLastSection {
+  width: 100%;
+  background: var(--surface-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid var(--border);
+}
+
+.noteTextInput {
+  width: 100%;
+  background: transparent;
+  color: var(--text);
+  box-sizing: border-box;
+  border: 0.1rem solid var(--note-accent);
+  min-height: 10rem;
+  padding: 0.5rem;
+  resize: vertical;
+  border-radius: 1rem;
+  transition: all 0.25s ease-in;
+}
+
+.headInput::placeholder,
+.noteTextInput::placeholder {
+  color: var(--text-muted);
+}
+
+.headInput:focus,
+.noteTextInput:focus {
+  border-color: var(--border-hovered);
+}
+
+.noteInputContainer {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  background: var(--blured);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500;
+  animation: show 0.25s ease-in both;
+}
+
+.noteInputContainer>* {
+  position: relative;
+  z-index: 501;
+}
+
+.noteInputWrapper {
+  width: 25%;
+  display: flex;
+  background: var(--surface-muted);
+  flex-direction: column;
+  row-gap: 2rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  animation: modalShow 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.noteType {
+  background: var(--note-accent);
+}
+
+
+/* ================ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ============= */
+
+
+
+
+
+
+
+
+
+
+/* ==============================================The journalStyle ========================================================================================================= */
+.journalInputContainer {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  background: var(--blured);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500;
+  animation: show 0.25s ease-in both;
+}
+
+.journalInputContainer>* {
+  position: relative;
+  z-index: 501;
+}
+
+.journalInputWrapper {
+  width: 25%;
+  display: flex;
+  background: var(--surface-muted);
+  flex-direction: column;
+  row-gap: 2rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  animation: modalShow 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.journalTextInput {
+  width: 100%;
+  background: transparent;
+  color: var(--text);
+  box-sizing: border-box;
+  border: 0.1rem solid var(--border);
+  min-height: 10rem;
+  padding: 0.5rem;
+  resize: vertical;
+  border-radius: 1rem;
+  transition: all 0.25s ease-in;
+}
+
+.headInput::placeholder,
+.journalTextInput::placeholder {
+  color: var(--text-muted);
+}
+
+.headInput:focus,
+.journalTextInput:focus {
+  border-color: var(--accent);
+}
+
+.journalContainer {
+  background-color: var(--surface);
+  border-radius: 1rem;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: clip;
+  border: 2px solid transparent;
+  border-top: 2px solid var(--journal-accent);
+  transition: all 0.25s ease-in-out;
+}
+
+.journalContainer:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-4px);
+  border-color: var(--border-hovered);
+}
+
+.journalDateWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.journalDate {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+
+.journal {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  padding: 1rem;
+}
+
+.journalHead {
+  width: 100%;
+  font-size: 1.5rem;
+  font-family: sans-serif;
+}
+
+.journalPara {
+  width: 100%;
+  font-size: 1rem;
+  opacity: 0.9;
+  font-family: sans-serif;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.journalLastSection {
+  width: 100%;
+  background: var(--surface-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid var(--border);
+}
+
+.journalType {
+  background: var(--journal-accent);
+}
+
+
+/* ================ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ============= */
+
+
+
+
+
+
+
+/* =================================================The todoStyle ========================================================================================================= */
+
+.todoInputContainer {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  background: var(--blured);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500;
+  animation: show 0.25s ease-in both;
+}
+
+.todoInputContainer>* {
+  position: relative;
+  z-index: 501;
+}
+
+
+.todoInputWrapper {
+  width: 25%;
+  display: flex;
+  background: var(--surface-muted);
+  flex-direction: column;
+  row-gap: 2rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  animation: modalShow 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.todoTextInput {
+  width: 100%;
+  background: transparent;
+  color: var(--text);
+  box-sizing: border-box;
+  border: 0.1rem solid var(--border);
+  min-height: 10rem;
+  padding: 0.5rem;
+  resize: vertical;
+  border-radius: 1rem;
+  transition: all 0.25s ease-in;
+}
+
+.todoTextInput::placeholder {
+  color: var(--text-muted);
+}
+
+.todoTextInput:focus {
+  border-color: var(--accent);
+}
+
+.todoContainer {
+  background-color: var(--surface);
+  border-radius: 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  overflow: clip;
+  border: 2px solid transparent;
+  border-top: 2px solid var(--todo-accent);
+  transition: all 0.25s ease-in-out;
+}
+
+.todoContainer:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-4px);
+  border-color: var(--border-hovered);
+}
+
+
+.todo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 0.5rem;
+  padding: 1rem 0 1rem 1rem;
+}
+
+.todoCreatedDateTime {
+  font-family: sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0.25rem 0;
+}
+
+
+.todoPara {
+  width: 100%;
+  font-size: 1rem;
+  opacity: 0.9;
+  font-family: sans-serif;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.dueTime {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 1rem 0;
+}
+
+.dueTime {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-family: sans-serif;
+}
+
+.todoTime {
+  font-family: sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0.25rem 0;
+}
+
+
+.todoCorrection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+
+.todoType {
+  background: var(--todo-accent);
+}
+
+/* ================ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX ============= */
+
+
+
+
+@keyframes modalShow {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(48px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes toastAnimation {
+  0% {
+    transform: translateX(1rem);
+    opacity: 0;
+  }
+
+  10% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(1rem);
+    opacity: 0;
+  }
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+
+  }
+}
+
+@keyframes hide {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+
+  }
+}
+
+@keyframes showUp {
+  from {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+
+  }
+}
+
+@keyframes showDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(1rem);
+    opacity: 0;
+
+  }
+}
+
+@media (max-width : 1400px) {
+  aside {
+    width: 20vw;
+  }
+
+  .hide {
+    width: 5vw;
+  }
+}
+
+@media (max-width : 1020px) {
+  aside {
+    width: 25vw;
+  }
+
+  .hide {
+    width: 6vw;
+  }
+
+  .noteInputWrapper {
+    width: 35%;
+  }
+
+  .journalInputWrapper {
+    width: 35%;
+  }
+
+  .todoInputWrapper {
+    width: 35%;
+  }
+
+  .typeSelectionContainer {
+    width: 35%;
+  }
+
+  .contentPage {
+    columns: 2;
+  }
+
+}
+
+@media (max-width : 850px) {
+  aside {
+    width: 30vw;
+  }
+
+  .hide {
+    width: 7vw;
+  }
+}
+
+@media (max-width : 700px) {
+  aside {
+    width: 35vw;
+  }
+
+  .hide {
+    width: 8vw;
+  }
+
+  .noteInputWrapper {
+    width: 50%;
+  }
+
+  .journalInputWrapper {
+    width: 50%;
+  }
+
+  .todoInputWrapper {
+    width: 50%;
+  }
+
+  .typeSelectionContainer {
+    width: 50%;
+  }
+
+  .contentPage {
+    columns: 1;
+    padding: 1rem;
+  }
+}
+
+
+@media (max-width : 600px) {
+  aside {
+    width: 40vw;
+  }
+
+  .hide {
+    width: 10vw;
+  }
+
+  .noteInputWrapper {
+    width: 60%;
+  }
+
+  .journalInputWrapper {
+    width: 60%;
+  }
+
+  .todoInputWrapper {
+    width: 60%;
+  }
+
+  .typeSelectionContainer {
+    width: 60%;
+  }
+}
+
+@media (max-width : 500px) {
+  .hide {
+    width: 12vw;
+  }
+}
+
+@media (max-width : 400px) {}
