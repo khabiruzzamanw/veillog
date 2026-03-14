@@ -265,11 +265,11 @@ function journalUI(headingText, text, day, month, dateNumber, date, time, id, ty
 
   if (document.body.classList.contains("dark")) {
 
-    journalEditImageSrc = "images/editNoteLight.svg";
-    journalDeleteImageSrc = "images/deleteLight.svg";
+    journalEditImageSrc = "svgs/editNoteLight.svg";
+    journalDeleteImageSrc = "svgs/deleteLight.svg";
   } else {
-    journalEditImageSrc = "images/editNoteDark.svg";
-    journalDeleteImageSrc = "images/deleteDark.svg";
+    journalEditImageSrc = "svgs/editNoteDark.svg";
+    journalDeleteImageSrc = "svgs/deleteDark.svg";
   }
   journalEditImage.src = journalEditImageSrc;
   journalDeleteImage.src = journalDeleteImageSrc;
@@ -435,11 +435,11 @@ function todoUI(text, date, time, todoDueTime, id, type) {
 
   if (document.body.classList.contains("dark")) {
 
-    todoEditImageSrc = "images/editNoteLight.svg";
-    todoDeleteImageSrc = "images/deleteLight.svg";
+    todoEditImageSrc = "svgs/editNoteLight.svg";
+    todoDeleteImageSrc = "svgs/deleteLight.svg";
   } else {
-    todoEditImageSrc = "images/editNoteDark.svg";
-    todoDeleteImageSrc = "images/deleteDark.svg";
+    todoEditImageSrc = "svgs/editNoteDark.svg";
+    todoDeleteImageSrc = "svgs/deleteDark.svg";
   }
   todoEditImage.src = todoEditImageSrc;
   todoDeleteImage.src = todoDeleteImageSrc;
@@ -555,11 +555,11 @@ function noteUI(text, headingText, id, date, time, type) {
 
   if (document.body.classList.contains("dark")) {
 
-    noteEditImageSrc = "images/editNoteLight.svg";
-    noteDeleteImageSrc = "images/deleteLight.svg";
+    noteEditImageSrc = "svgs/editNoteLight.svg";
+    noteDeleteImageSrc = "svgs/deleteLight.svg";
   } else {
-    noteEditImageSrc = "images/editNoteDark.svg";
-    noteDeleteImageSrc = "images/deleteDark.svg";
+    noteEditImageSrc = "svgs/editNoteDark.svg";
+    noteDeleteImageSrc = "svgs/deleteDark.svg";
   }
 
   const note = document.createElement("div");
@@ -773,8 +773,6 @@ function toggles() {
 
     });
 
-    // console.log(search.value.trim().toLowerCase());
-
   });
 
   function sideBarToggle() {
@@ -833,15 +831,15 @@ function themeChanger() {
 
   document.body.classList.remove("dark", "light");
   document.body.classList.add(localStorage.getItem("userTheme") || "dark");
-  addEntryImage.src = localStorage.getItem("addEntryImage") || "images/addNoteLight.svg";
-  searchbutton.src = localStorage.getItem("searchbutton") || "images/searchLight.svg";
-  emptyNoteAdd.src = localStorage.getItem("emptyNoteAdd") || "images/emptyNoteLight.svg";
-  menu.src = localStorage.getItem("menu") || "images/menuLight.svg";
-  daySelectImage.src = localStorage.getItem("daySelectImage") || "images/daySelectionLight.svg";
-  categorySelectImage.src = localStorage.getItem("categorySelectImage") || "images/categoryIconLight.svg";
-  theme.src = localStorage.getItem("theme") || "images/darkMode.svg";
+  addEntryImage.src = localStorage.getItem("addEntryImage") || "svgs/addNoteLight.svg";
+  searchbutton.src = localStorage.getItem("searchbutton") || "svgs/searchLight.svg";
+  emptyNoteAdd.src = localStorage.getItem("emptyNoteAdd") || "svgs/emptyNoteLight.svg";
+  menu.src = localStorage.getItem("menu") || "svgs/menuLight.svg";
+  daySelectImage.src = localStorage.getItem("daySelectImage") || "svgs/daySelectionLight.svg";
+  categorySelectImage.src = localStorage.getItem("categorySelectImage") || "svgs/categoryIconLight.svg";
+  theme.src = localStorage.getItem("theme") || "svgs/darkMode.svg";
   dropDownIcon.forEach((icon) => {
-    icon.src = localStorage.getItem("dropDownIcon") || "images/dropDownLight.svg";
+    icon.src = localStorage.getItem("dropDownIcon") || "svgs/dropDownLight.svg";
   });
 
 
@@ -857,123 +855,123 @@ function themeChanger() {
     if (document.body.classList.contains('dark')) {
       document.body.classList.replace('dark', 'light');
       localStorage.setItem("userTheme", "light");
-      addEntryImage.src = "images/addNoteDark.svg";
-      localStorage.setItem("addEntryImage", "images/addNoteDark.svg");
-      searchbutton.src = "images/searchDark.svg";
-      localStorage.setItem("searchbutton", "images/searchDark.svg");
+      addEntryImage.src = "svgs/addNoteDark.svg";
+      localStorage.setItem("addEntryImage", "svgs/addNoteDark.svg");
+      searchbutton.src = "svgs/searchDark.svg";
+      localStorage.setItem("searchbutton", "imagessvgssearchDark.svg");
       theme.src = "images/lightMode.svg";
-      localStorage.setItem("theme", "images/lightMode.svg");
-      menu.src = "images/menuDark.svg";
-      localStorage.setItem("menu", "images/menuDark.svg");
-      daySelectImage.src = "images/daySelectionDark.svg";
-      localStorage.setItem("daySelectImage", "images/daySelectionDark.svg");
-      categorySelectImage.src = "images/categoryIconDark.svg";
-      localStorage.setItem("categorySelectImage", "images/categoryIconDark.svg");
+      localStorage.setItem("theme", "svgs/lightMode.svg");
+      menu.src = "svgs/menuDark.svg";
+      localStorage.setItem("menu", "svgs/menuDark.svg");
+      daySelectImage.src = "svgs/daySelectionDark.svg";
+      localStorage.setItem("daySelectImage", "svgs/daySelectionDark.svg");
+      categorySelectImage.src = "svgs/categoryIconDark.svg";
+      localStorage.setItem("categorySelectImage", "svgs/categoryIconDark.svg");
       dropDownIcon.forEach((icon) => {
-        icon.src = "images/dropDownDark.svg";
-        localStorage.setItem("dropDownIcon", "images/dropDownDark.svg");
+        icon.src = "svgs/dropDownDark.svg";
+        localStorage.setItem("dropDownIcon", "svgs/dropDownDark.svg");
       });
 
       if (noteEditImage) {
         noteEditImage.forEach((button) => {
-          button.src = "images/editNoteDark.svg";
-          localStorage.setItem("noteEditImage", "images/editNoteDark.svg");
+          button.src = "svgs/editNoteDark.svg";
+          localStorage.setItem("noteEditImage", "svgs/editNoteDark.svg");
         });
       }
       if (noteDeleteImage) {
         noteDeleteImage.forEach((button) => {
-          button.src = "images/deleteDark.svg";
-          localStorage.setItem("noteDeleteImage", "images/deleteDark.svg");
+          button.src = "svgs/deleteDark.svg";
+          localStorage.setItem("noteDeleteImage", "svgs/deleteDark.svg");
         });
       }
       if (journalEditImage) {
         journalEditImage.forEach((button) => {
-          button.src = "images/editNoteDark.svg";
-          localStorage.setItem("journalEditImage", "images/editNoteDark.svg");
+          button.src = "svgs/editNoteDark.svg";
+          localStorage.setItem("journalEditImage", "svgs/editNoteDark.svg");
         });
       }
       if (journalDeleteImage) {
         journalDeleteImage.forEach((button) => {
-          button.src = "images/deleteDark.svg";
-          localStorage.setItem("journalDeleteImage", "images/deleteDark.svg");
+          button.src = "svgs/deleteDark.svg";
+          localStorage.setItem("journalDeleteImage", "svgs/deleteDark.svg");
         });
       }
       if (todoEditImage) {
         todoEditImage.forEach((button) => {
-          button.src = "images/editNoteDark.svg";
-          localStorage.setItem("todoEditImage", "images/editNoteDark.svg");
+          button.src = "svgs/editNoteDark.svg";
+          localStorage.setItem("todoEditImage", "svgs/editNoteDark.svg");
         });
       }
       if (todoDeleteImage) {
         todoDeleteImage.forEach((button) => {
-          button.src = "images/deleteDark.svg";
-          localStorage.setItem("todoDeleteImage", "images/deleteDark.svg");
+          button.src = "svgs/deleteDark.svg";
+          localStorage.setItem("todoDeleteImage", "svgs/deleteDark.svg");
         });
       }
       if (emptyNoteAdd) {
-        emptyNoteAdd.src = "images/emptyNoteDark.svg";
-        localStorage.setItem("emptyNoteAdd", "images/emptyNoteDark.svg");
+        emptyNoteAdd.src = "svgs/emptyNoteDark.svg";
+        localStorage.setItem("emptyNoteAdd", "svgs/emptyNoteDark.svg");
       }
 
     } else {
       document.body.classList.replace('light', 'dark');
-      addEntryImage.src = "images/addNoteLight.svg";
-      searchbutton.src = "images/searchLight.svg";
-      theme.src = "images/darkMode.svg";
+      addEntryImage.src = "svgs/addNoteLight.svg";
+      searchbutton.src = "svgs/searchLight.svg";
+      theme.src = "svgs/darkMode.svg";
       localStorage.setItem("userTheme", "dark");
-      localStorage.setItem("addEntryImage", "images/addNoteLight.svg");
-      localStorage.setItem("searchbutton", "images/searchLight.svg");
-      localStorage.setItem("theme", "images/darkMode.svg");
-      menu.src = "images/menuLight.svg";
-      localStorage.setItem("menu", "images/menuLight.svg");
-      daySelectImage.src = "images/daySelectionLight.svg";
-      localStorage.setItem("daySelectImage", "images/daySelectionLight.svg");
-      categorySelectImage.src = "images/categoryIconLight.svg";
-      localStorage.setItem("categorySelectImage", "images/categoryIconLight.svg");
+      localStorage.setItem("addEntryImage", "svgs/addNoteLight.svg");
+      localStorage.setItem("searchbutton", "svgs/searchLight.svg");
+      localStorage.setItem("theme", "svgs/darkMode.svg");
+      menu.src = "svgs/menuLight.svg";
+      localStorage.setItem("menu", "svgs/menuLight.svg");
+      daySelectImage.src = "svgs/daySelectionLight.svg";
+      localStorage.setItem("daySelectImage", "svgs/daySelectionLight.svg");
+      categorySelectImage.src = "svgs/categoryIconLight.svg";
+      localStorage.setItem("categorySelectImage", "svgs/categoryIconLight.svg");
       dropDownIcon.forEach((icon) => {
-        icon.src = "images/dropDownLight.svg";
-        localStorage.setItem("dropDownIcon", "images/dropDownLight.svg");
+        icon.src = "svgs/dropDownLight.svg";
+        localStorage.setItem("dropDownIcon", "svgs/dropDownLight.svg");
       });
 
       if (noteEditImage) {
         noteEditImage.forEach((button) => {
-          button.src = "images/editNoteLight.svg";
-          localStorage.setItem("noteEditImage", "images/editNoteLight.svg");
+          button.src = "svgs/editNoteLight.svg";
+          localStorage.setItem("noteEditImage", "svgs/editNoteLight.svg");
         })
       }
       if (noteDeleteImage) {
         noteDeleteImage.forEach((button) => {
-          button.src = "images/deleteLight.svg";
-          localStorage.setItem("noteDeleteImage", "images/deleteLight.svg");
+          button.src = "svgs/deleteLight.svg";
+          localStorage.setItem("noteDeleteImage", "svgs/deleteLight.svg");
         })
       }
       if (journalEditImage) {
         journalEditImage.forEach((button) => {
-          button.src = "images/editNoteLight.svg";
-          localStorage.setItem("journalEditImage", "images/editNoteLight.svg");
+          button.src = "svgs/editNoteLight.svg";
+          localStorage.setItem("journalEditImage", "svgs/editNoteLight.svg");
         })
       }
       if (journalDeleteImage) {
         journalDeleteImage.forEach((button) => {
-          button.src = "images/deleteLight.svg";
-          localStorage.setItem("journalDeleteImage", "images/deleteLight.svg");
+          button.src = "svgs/deleteLight.svg";
+          localStorage.setItem("journalDeleteImage", "svgs/deleteLight.svg");
         })
       }
       if (todoEditImage) {
         todoEditImage.forEach((button) => {
-          button.src = "images/editNoteLight.svg";
-          localStorage.setItem("todoEditImage", "images/editNoteLight.svg");
+          button.src = "svgs/editNoteLight.svg";
+          localStorage.setItem("todoEditImage", "svgs/editNoteLight.svg");
         })
       }
       if (todoDeleteImage) {
         todoDeleteImage.forEach((button) => {
-          button.src = "images/deleteLight.svg";
-          localStorage.setItem("todoDeleteImage", "images/deleteLight.svg");
+          button.src = "svgs/deleteLight.svg";
+          localStorage.setItem("todoDeleteImage", "svgs/deleteLight.svg");
         })
       }
       if (emptyNoteAdd) {
-        emptyNoteAdd.src = "images/emptyNoteLight.svg";
-        localStorage.setItem("emptyNoteAdd", "images/emptyNoteLight.svg");
+        emptyNoteAdd.src = "svgs/emptyNoteLight.svg";
+        localStorage.setItem("emptyNoteAdd", "svgs/emptyNoteLight.svg");
       }
 
     };
