@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="signin.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sign in</title>
+  </head>
+
+  <body>
+    <main>
+      <div class="container">
+        <div class="title">
+          <p>sign in</p>
+        </div>
+
+        <form action="/signin" method="post">
+          <div class="username">
+            <input
+              class="email"
+              type="email"
+              name="email"
+              placeholder="Put your email"
+              title="ik gmail,gay"
+            />
+          </div>
+          <div class="security">
+            <input
+              class="password"
+              type="password"
+              name="password"
+              placeholder="Type your password"
+              title="Huhhh! her birth-date"
+            />
+          </div>
+          <div class="submission">
+            <button class="sign-in" type="submit" title="make sure to recheck">
+              sign in
+            </button>
+          </div>
+        </form>
+
+        <div>
+          <p>
+            To be a part of our family &#63;<a href="/signup" class="sign-up"
+              >sign up
+            </a>
+          </p>
+        </div>
+      </div>
+    </main>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const logerror = params.get("logerror");
+      if (logerror) {
+        toastFunction(logerror, "toastPopUp");
+      }
+
+      function toastFunction(message, name) {
+        const toast = document.createElement("div");
+        toast.textContent = message;
+        toast.setAttribute("class", name);
+        document.body.append(toast);
+        setTimeout(() => toast.remove(), 5000);
+      }
+
+      window.history.replaceState({}, document.title, "/signin");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="signup.css" />
+    <title>sign up</title>
+  </head>
+
+  <body>
+    <main>
+      <div class="container">
+        <div class="title">
+          <p>sign up</p>
+        </div>
+
+        <form action="/signup" method="post">
+          <div class="username-dev">
+            <input
+              class="username"
+              type="text"
+              name="username"
+              placeholder="Get a unique username"
+              title="Don't use that"
+            />
+          </div>
+          <div class="email-dev">
+            <input
+              class="email"
+              type="email"
+              name="email"
+              placeholder="Put a valid email"
+              title="ik gmail,gay"
+            />
+          </div>
+          <div class="security">
+            <input
+              class="password"
+              type="password"
+              name="password"
+              placeholder="Create a strong password"
+              title="Don't use her birth-date"
+            />
+          </div>
+          <div class="submission">
+            <button class="register" type="submit" title="make sure to recheck">
+              sign up
+            </button>
+          </div>
+        </form>
+
+        <div>
+          <p>
+            Already a part of our family &#63;<a href="/signin" class="sign-in"
+              >sign in
+            </a>
+          </p>
+        </div>
+      </div>
+    </main>
+    <script>
+      function toastFunction(message, name) {
+        const toast = document.createElement("div");
+        toast.textContent = message;
+        toast.setAttribute("class", name);
+        document.body.append(toast);
+        setTimeout(() => toast.remove(), 5000);
+      }
+    </script>
+  </body>
+</html>

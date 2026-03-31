@@ -1,0 +1,197 @@
+:root {
+  --bg-color: #111111;
+  --container-color: #333333;
+  --input-bg-color: #525252;
+  --font-color: #f2f2f2;
+  --hovered-font-color: #f2f2f2;
+  --active-font-color: #f2f2f2;
+  --placeholder-font-color: #848884;
+  --bar-color: #242424;
+  --box-shadow-color: rgb(0, 0, 0);
+  --text-shadow-color: black;
+  --button-color: #5f7470;
+  --hovered-button-color: #73877b;
+  --active-button-color: #839788;
+
+  /* --dark-bg: #111111;
+--bg-color: #333333;
+--blur-bg-color: rgba(150, 150, 150, 0.25);
+--card-bg-color: #333333;
+--container-color: #ffffff15;
+--font-color: #F2F2F2;
+--hovered-font-color: #F2F2F2;
+--active-font-color:#F2F2F2;
+--red-font: crimson;
+--bar-color: #333333;
+--box-shadow-color: rgb(0, 0, 0);
+--text-shadow-color: black;
+--button-color: #5f7470;
+--hovered-button-color: #73877b;
+--active-button-color:#839788;
+--footer-bg-color: rgb(20, 20, 20); */
+}
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  border: none;
+  text-decoration: none;
+  outline: none;
+}
+
+img {
+  width: 100%;
+  object-fit: contain;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Arial, Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  color: var(--font-color);
+  background-color: var(--bg-color);
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container .title {
+  margin-bottom: 2rem;
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+.container {
+  width: clamp(20rem, 25vw, 40rem);
+  height: clamp(20rem, 50vh, 60rem);
+  background-color: var(--container-color);
+  border: 1px solid var(--bar-color);
+  border-radius: 1rem;
+  box-shadow:
+    0 0 2rem var(--box-shadow-color),
+    0.25rem 0.25rem 1rem var(--box-shadow-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+}
+
+.username .email {
+  padding: 0.6rem 0.4rem;
+  background-color: var(--input-bg-color);
+  border: 0.125rem solid transparent;
+  border-radius: 2rem;
+  color: var(--font-color);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease-out;
+}
+
+.email:focus {
+  border-bottom: 0.125rem solid var(--bar-color);
+  background-color: transparent;
+  border-radius: 0;
+  color: var(--font-color);
+  font-size: 1rem;
+}
+
+.security .password {
+  padding: 0.6rem 0.4rem;
+  background-color: var(--input-bg-color);
+  border: 0.125rem solid transparent;
+  border-radius: 2rem;
+  color: var(--font-color);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease-out;
+}
+.password:focus {
+  border-bottom: 0.125rem solid var(--bar-color);
+  background-color: transparent;
+  border-radius: 0;
+  color: var(--font-color);
+  font-size: 1rem;
+}
+
+.submission .log-in {
+  padding: 0.6rem 5.15rem;
+  background-color: var(--button-color);
+  border: 0.1rem solid transparent;
+  border-radius: 2rem;
+  color: var(--font-color);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease-out;
+}
+
+.log-in:hover {
+  background-color: var(--hovered-button-color);
+  border: 0.1rem solid var(--button-color);
+  box-shadow: 0.09rem 0.09rem 0.25rem var(--box-shadow-color);
+  transform: scale(1.005);
+  cursor: pointer;
+}
+
+.log-in:active {
+  background-color: var(--active-button-color);
+  transform: scale(0.999);
+  box-shadow: none;
+}
+.sign-up {
+  color: var(--font-color);
+  margin-left: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease-in;
+}
+.sign-up:hover {
+  text-decoration: underline;
+}
+
+.toastPopUp {
+  position: fixed;
+  bottom: 2rem;
+  right: 1rem;
+  z-index: 1000;
+  animation: toastAnimation 5s ease-in-out both;
+  background: var(--blured);
+  backdrop-filter: blur(4px);
+}
+
+@keyframes toastAnimation {
+  0% {
+    transform: translateX(1rem);
+    opacity: 0;
+  }
+
+  10% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(1rem);
+    opacity: 0;
+  }
+}
