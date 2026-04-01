@@ -13,7 +13,7 @@ function appFunction() {
       //   Array.isArray(dataResponse),
       //   dataResponse,
       // );
-      if (!dataResponse.ok) {
+      if (!dataResponseJson.ok) {
         throw new Error();
       } else {
         localDataArray = dataResponse;
