@@ -22,7 +22,7 @@ app.use("/api", todoRouter);
 
 async function startServer() {
   try {
-    connectToDB();
+    await connectToDB();
     app.listen(process.env.PORT, () => {
       console.log(`server is running at port : ${process.env.PORT}`);
     });

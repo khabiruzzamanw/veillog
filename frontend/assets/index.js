@@ -1,21 +1,27 @@
-// const { post } = require("../../backend/routes/user.route");
-
 appFunction();
 
 function appFunction() {
   let localDataArray = [];
-  fetchDataFromDB();
 
   async function fetchDataFromDB() {
     try {
       const dataResponseJson = await fetch("/api/entries");
 
       const dataResponse = await dataResponseJson.json();
-
-      localDataArray = dataResponse;
-      console.log(localDataArray);
+      // console.log(
+      //   typeof dataResponse,
+      //   Array.isArray(dataResponse),
+      //   dataResponse,
+      // );
+      if (!dataResponse.ok) {
+        throw new Error();
+      } else {
+        localDataArray = dataResponse;
+        getData(localDataArray);
+      }
+      // console.log(localDataArray);
     } catch (error) {
-      console.log(error);
+      console.log(`error while fetching entries route : ${error}`);
     }
   }
 
@@ -28,8 +34,8 @@ function appFunction() {
   toggles();
   daySelection();
   typeSelectionFunction();
+  fetchDataFromDB();
   noteCreation();
-  getData(localDataArray);
 
   function noteCreation() {
     const addEntry = document.querySelector("#addEntry");
@@ -183,7 +189,7 @@ function appFunction() {
         const obj = {
           heading: headingText,
           text: text,
-          category: type,
+          type: type,
           date: dateDigit,
           time: timeDigit,
           dateNumber: numberedDate,
@@ -196,20 +202,21 @@ function appFunction() {
           try {
             const response = await fetch(`/api/${type}s`, {
               method: "POST",
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify(obj),
             });
 
             const saved = await response.json();
             obj._id = saved._id;
+            localDataArray.push(obj);
           } catch (error) {
-            console.log(error);
+            console.log(`error while seting data to db : ${error}`);
           }
         }
 
         setTypeDataToDB();
-        localDataArray.push(obj);
 
-        switch (obj.category) {
+        switch (obj.type) {
           case "note":
             renderUI(obj, false);
             break;
@@ -220,7 +227,7 @@ function appFunction() {
             renderUI(obj, true);
             break;
         }
-        toastFunction(`${obj.category} is added`, "addToast");
+        toastFunction(`${obj.type} is added`, "addToast");
 
         textInput.value = "";
         headInput.value = "";
@@ -230,13 +237,9 @@ function appFunction() {
     }
   }
 
-  // function setData(localDataArray) {
-  //   localStorage.setItem("key", JSON.stringify(localDataArray));
-  // };
-
   function getData(localDataArray) {
     localDataArray.forEach((element, index) => {
-      switch (element.category) {
+      switch (element.type) {
         case "note":
           renderUI(element, false);
           break;
@@ -257,7 +260,7 @@ function appFunction() {
       warning.style.display = "none";
     }
 
-    const theType = dataObject.category;
+    const theType = dataObject.type;
 
     const logContainer = document.createElement("div");
     logContainer.setAttribute("class", `${theType}Container`);
@@ -283,8 +286,8 @@ function appFunction() {
     const logPara = document.createElement("p");
     logPara.setAttribute("class", `${theType}Para`);
 
-    const dividerLine = document.createElement("span");
-    dividerLine.setAttribute("class", "dividerLine");
+    const div_iderLine = document.createElement("span");
+    div_iderLine.setAttribute("class", "div_iderLine");
 
     const logLastSection = document.createElement("div");
     logLastSection.setAttribute("class", `${theType}LastSection`);
@@ -342,7 +345,7 @@ function appFunction() {
 
     log.append(logHead);
     if (theType !== "todo" && theType !== "journal") {
-      log.append(dividerLine);
+      log.append(div_iderLine);
     }
 
     log.append(logPara);
@@ -387,18 +390,28 @@ function appFunction() {
     fragment.append(logContainer);
     contentPage.appendChild(fragment);
 
-    logDeleteImage.addEventListener("click", () => {
-      localDataArray = localDataArray.filter((el) => {
-        return el.id !== dataObject.id;
-      });
+    logDeleteImage.addEventListener("click", async function () {
+      try {
+        const isDeleted = await fetch(`/api/${theType}s/${dataObject._id}`, {
+          method: "DELETE",
+        });
 
-      setData(localDataArray);
-      logContainer.remove();
-      toastFunction(`${theType} is deleted`, "deleteToast");
+        if (!isDeleted.ok) {
+          throw new Error();
+        }
+        localDataArray = localDataArray.filter((el) => {
+          return el._id !== dataObject._id;
+        });
 
-      if (localDataArray.length === 0) {
-        const warning = document.querySelector("#warning");
-        if (warning) warning.style.display = "flex";
+        toastFunction(`${theType} is deleted`, "deleteToast");
+
+        if (localDataArray.length === 0) {
+          const warning = document.querySelector("#warning");
+          if (warning) warning.style.display = "flex";
+        }
+        logContainer.remove();
+      } catch (error) {
+        console.log(`error while deleting data : ${error}`);
       }
     });
 
@@ -450,27 +463,38 @@ function appFunction() {
         container.remove();
       });
 
-      saveButton.addEventListener("click", () => {
-        const editableObject = localDataArray.find((element) => {
-          return element.id === dataObject.id;
-        });
-        if (editableObject) {
-          if (editableObject.text !== textInput.value) {
-            editableObject.text = textInput.value;
-            logPara.textContent = textInput.value;
-          }
+      saveButton.addEventListener("click", async function () {
+        try {
+          const editableObject = localDataArray.find((element) => {
+            return element._id === dataObject._id;
+          });
+          let dbUpdateData = {};
 
-          if (theType !== "todo") {
-            if (editableObject.heading !== headInput.value) {
-              editableObject.heading = headInput.value;
-              logHead.textContent = headInput.value;
+          if (editableObject) {
+            if (editableObject.text !== textInput.value) {
+              editableObject.text = textInput.value;
+              logPara.textContent = textInput.value;
+              dbUpdateData.text = textInput.value;
+            }
+
+            if (theType !== "todo") {
+              if (editableObject.heading !== headInput.value) {
+                editableObject.heading = headInput.value;
+                logHead.textContent = headInput.value;
+                dbUpdateData.heading = headInput.value;
+              }
             }
           }
 
-          setData(localDataArray);
+          await fetch(`/api/${theType}s/${editableObject._id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dbUpdateData),
+          });
+          container.remove();
+        } catch (error) {
+          console.log(`error while editting and saving : ${error}`);
         }
-
-        container.remove();
       });
     }
   }
@@ -523,7 +547,7 @@ function appFunction() {
       }
 
       searchedItems.forEach((element) => {
-        switch (element.category) {
+        switch (element.type) {
           case "note":
             renderUI(element, false);
             break;
@@ -584,7 +608,7 @@ function appFunction() {
     const emptyNoteAdd = document.querySelector(".emptyNoteAdd");
     const menu = document.querySelector(".menu");
     const daySelectImage = document.querySelector(".daySelectImage");
-    const categorySelectImage = document.querySelector(".categorySelectImage");
+    const typeSelectImage = document.querySelector(".typeSelectImage");
     const dropDownIcon = document.querySelectorAll(".dropDownIcon");
 
     const imageIcons = {
@@ -593,7 +617,7 @@ function appFunction() {
         editIcon: "svgs/editDark.svg",
         emptyNoteIcon: "svgs/emptyDark.svg",
         themeIcon: "svgs/lightMode.svg",
-        categoryIcon: "svgs/categoryDark.svg",
+        typeIcon: "svgs/typeDark.svg",
         daySelectionIcon: "svgs/daySelectionDark.svg",
         deleteIcon: "svgs/deleteDark.svg",
         dropDownIcon: "svgs/dropDownDark.svg",
@@ -607,7 +631,7 @@ function appFunction() {
         editIcon: "svgs/editLight.svg",
         emptyNoteIcon: "svgs/emptyLight.svg",
         themeIcon: "svgs/darkMode.svg",
-        categoryIcon: "svgs/categoryLight.svg",
+        typeIcon: "svgs/typeLight.svg",
         daySelectionIcon: "svgs/daySelectionLight.svg",
         deleteIcon: "svgs/deleteLight.svg",
         dropDownIcon: "svgs/dropDownLight.svg",
@@ -643,7 +667,7 @@ function appFunction() {
       emptyNoteAdd.src = imageIcons[themeKey].emptyNoteIcon;
       menu.src = imageIcons[themeKey].menuIcon;
       daySelectImage.src = imageIcons[themeKey].daySelectionIcon;
-      categorySelectImage.src = imageIcons[themeKey].categoryIcon;
+      typeSelectImage.src = imageIcons[themeKey].typeIcon;
       theme.src = imageIcons[themeKey].themeIcon;
       dropDownIcon.forEach((icon) => {
         icon.src = imageIcons[themeKey].dropDownIcon;
@@ -681,7 +705,7 @@ function appFunction() {
         presentableObject = localDataArray;
       } else {
         presentableObject = localDataArray.filter((el) => {
-          return el.category === type;
+          return el.type === type;
         });
       }
 
@@ -701,7 +725,7 @@ function appFunction() {
       }
 
       presentableObject.forEach((element) => {
-        switch (element.category) {
+        switch (element.type) {
           case "note":
             renderUI(element, false);
             break;
@@ -750,12 +774,12 @@ function appFunction() {
             break;
           case "Over a week":
             selectedDaydata = localDataArray.filter((el) => {
-              return el.id < Date.now() - 7 * 86400000;
+              return el._id < Date.now() - 7 * 86400000;
             });
             break;
           case "Over a month":
             selectedDaydata = localDataArray.filter((el) => {
-              return el.id < Date.now() - 30 * 86400000;
+              return el._id < Date.now() - 30 * 86400000;
             });
             break;
 
@@ -780,7 +804,7 @@ function appFunction() {
         }
 
         selectedDaydata.forEach((element) => {
-          switch (element.category) {
+          switch (element.type) {
             case "note":
               renderUI(element, false);
               break;

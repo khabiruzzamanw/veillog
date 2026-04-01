@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const journalSchema = new mongoose.Schema(
   {
+    type: String,
     ownerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

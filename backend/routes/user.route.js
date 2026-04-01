@@ -1,16 +1,20 @@
 const express = require("express");
+const router = express.Router();
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
-const user = require("../models/user.model.js");
-const router = express.Router();
 const path = require("path");
 const authentify = require("../middlewares/authetication.middleware.js");
+const user = require("../models/user.model.js");
 
 const frontendPath = path.join(__dirname, "../../frontend");
-
 router.use(express.static(path.join(frontendPath, "assets")));
 
-router.get("/users", authentify, function (req, res) {
+// router.use(function (req, res, next) {
+//   console.log("userRouter hit:", req.method, req.url);
+//   next();
+// });
+
+router.get("/", authentify, function (req, res) {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
@@ -40,6 +44,8 @@ router.get("/signup", function (req, res) {
 
 router.post("/signin", async function (req, res) {
   // log this if you need
+  // console.log(req.body);
+  // console.log("signin hit");
   // console.log(req.body);
   try {
     const { email, password } = req.body;
@@ -72,6 +78,7 @@ router.post("/signin", async function (req, res) {
 });
 
 router.get("/signin", function (req, res) {
+  // console.log("hello");
   res.sendFile(path.join(frontendPath, "signin.html"));
 });
 

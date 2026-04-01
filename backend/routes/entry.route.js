@@ -1,18 +1,3 @@
-// const express = require("express");
-// const router = express.Router();
-// const noteRouter = require("../routes/note.route.js");
-// const journalRouter = require("../routes/journal.route.js");
-// const todoRouter = require("../routes/todo.route.js");
-
-// router.get("/", function (req, res) {});
-
-// module.exports = router;
-//
-//
-//
-//
-//
-//
 const express = require("express");
 const router = express.Router();
 const authentify = require("../middlewares/authetication.middleware.js");
@@ -30,13 +15,13 @@ router.get("/entries", authentify, async (req, res) => {
       todo.find({ ownerId }),
     ]);
 
-    const all = [
-      ...notes.map((n) => ({ ...n.toObject(), category: "note" })),
-      ...journals.map((j) => ({ ...j.toObject(), category: "journal" })),
-      ...todos.map((t) => ({ ...t.toObject(), category: "todo" })),
-    ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    // findNotes(ownerId),
+    // findJournals(ownerId),
+    // findTodos(ownerId),
 
-    res.json(all);
+    const logs = [...notes, ...journals, ...todos];
+
+    res.json(logs);
   } catch (error) {
     res
       .status(500)
