@@ -1,57 +1,46 @@
 :root {
-  --bg-color: #111111;
-  --container-color: #333333;
-  --input-bg-color: #525252;
-  --font-color: #f2f2f2;
-  --hovered-font-color: #f2f2f2;
-  --active-font-color: #f2f2f2;
-  --placeholder-font-color: #848884;
-  --bar-color: #242424;
-  --box-shadow-color: rgb(0, 0, 0);
-  --text-shadow-color: black;
-  --button-color: #5f7470;
-  --hovered-button-color: #73877b;
-  --active-button-color: #839788;
-
-  /* --dark-bg: #111111;
---bg-color: #333333;
---blur-bg-color: rgba(150, 150, 150, 0.25);
---card-bg-color: #333333;
---container-color: #ffffff15;
---font-color: #F2F2F2;
---hovered-font-color: #F2F2F2;
---active-font-color:#F2F2F2;
---red-font: crimson;
---bar-color: #333333;
---box-shadow-color: rgb(0, 0, 0);
---text-shadow-color: black;
---button-color: #5f7470;
---hovered-button-color: #73877b;
---active-button-color:#839788;
---footer-bg-color: rgb(20, 20, 20); */
+  --bg: #080808;
+  --blured: rgba(0, 0, 0, 0.65);
+  --accent: #a93226;
+  --surface: #111111;
+  --surface-muted: #0d0d0d;
+  --surface-hovered: #1a1a1a;
+  --text: #f0f0f0;
+  --text-muted: #555555;
+  --border: rgba(255, 255, 255, 0.07);
+  --button: #080808;
+  --closeButton: #a93226;
+  --saveButton: #1a1a1a;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --deleteToast: #a93226;
+  --addToast: #555555;
+  --note-accent: #c9843a;
+  --journal-accent: #6b8f6b;
+  --todo-accent: #4a7fa5;
+  --border-hovered: rgba(255, 255, 255, 0.13);
+  --button-hovered: #111111;
 }
 * {
   padding: 0px;
   margin: 0px;
-  box-sizing: border-box;
-  border: none;
-  text-decoration: none;
   outline: none;
+  border: none;
+  box-sizing: border-box;
 }
 
-img {
-  width: 100%;
-  object-fit: contain;
-}
-
-html {
+html,
+body {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: Arial, Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  color: var(--font-color);
-  background-color: var(--bg-color);
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: sans-serif;
+  transition:
+    background 0.2s ease-in,
+    color 0.2s ease-in;
 }
 
 main {
@@ -70,12 +59,9 @@ main {
 .container {
   width: clamp(20rem, 25vw, 40rem);
   height: clamp(20rem, 50vh, 60rem);
-  background-color: var(--container-color);
-  border: 1px solid var(--bar-color);
+  background-color: var(--surface);
   border-radius: 1rem;
-  box-shadow:
-    0 0 2rem var(--box-shadow-color),
-    0.25rem 0.25rem 1rem var(--box-shadow-color);
+  box-shadow: var(--shadow), var(--shadow);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -94,67 +80,67 @@ main {
 
 .username .email {
   padding: 0.6rem 0.4rem;
-  background-color: var(--input-bg-color);
+  background-color: var(--surface-muted);
   border: 0.125rem solid transparent;
   border-radius: 2rem;
-  color: var(--font-color);
+  color: var(--text);
   font-size: 1rem;
   outline: none;
   transition: all 0.3s ease-out;
 }
 
 .email:focus {
-  border-bottom: 0.125rem solid var(--bar-color);
+  border-bottom: 0.125rem solid var(--border);
   background-color: transparent;
   border-radius: 0;
-  color: var(--font-color);
+  color: var(--text);
   font-size: 1rem;
 }
 
 .security .password {
   padding: 0.6rem 0.4rem;
-  background-color: var(--input-bg-color);
+  background-color: var(--surface-muted);
   border: 0.125rem solid transparent;
   border-radius: 2rem;
-  color: var(--font-color);
+  color: var(--text);
   font-size: 1rem;
   outline: none;
   transition: all 0.3s ease-out;
 }
 .password:focus {
-  border-bottom: 0.125rem solid var(--bar-color);
+  border-bottom: 0.125rem solid var(--border);
   background-color: transparent;
   border-radius: 0;
-  color: var(--font-color);
+  color: var(--text);
   font-size: 1rem;
 }
 
-.submission .log-in {
+.submission .sign-in {
   padding: 0.6rem 5.15rem;
-  background-color: var(--button-color);
+  background-color: var(--button);
   border: 0.1rem solid transparent;
   border-radius: 2rem;
-  color: var(--font-color);
+  color: var(--text);
   font-size: 1rem;
   outline: none;
   transition: all 0.3s ease-out;
 }
 
-.log-in:hover {
-  background-color: var(--hovered-button-color);
-  border: 0.1rem solid var(--button-color);
-  box-shadow: 0.09rem 0.09rem 0.25rem var(--box-shadow-color);
+.sign-in:hover {
+  background-color: var(--button-hovered);
+  border: 0.1rem solid var(--border);
+  box-shadow: var(--shadow);
   transform: scale(1.005);
   cursor: pointer;
 }
 
-.log-in:active {
-  background-color: var(--active-button-color);
+.sign-in:active {
+  background-color: var(--button);
   transform: scale(0.999);
   box-shadow: none;
 }
 .sign-up {
-  color: var(--font-color);
+  color: var(--text);
   margin-left: 1rem;
   cursor: pointer;
   text-decoration: none;
